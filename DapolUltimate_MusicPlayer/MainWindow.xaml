@@ -6,102 +6,115 @@
         ResizeMode="NoResize">
 
     <Window.Resources>
-        <!-- Glow Effect -->
-        <DropShadowEffect x:Key="GlowEffect"
-                          Color="#4DAEEF"
-                          Direction="0"
-                          ShadowDepth="0"
-                          Opacity="0.8"
-                          BlurRadius="15"/>
+        <!-- Цветовые ресурсы -->
+        <SolidColorBrush x:Key="AeroBlueBrush" Color="#FF4DAEEF"/>
+        <SolidColorBrush x:Key="AeroLightBlueBrush" Color="#FFB4E0FA"/>
+        <SolidColorBrush x:Key="AeroDarkBlueBrush" Color="#FF0078D7"/>
+        <SolidColorBrush x:Key="AeroGlassBrush" Color="#80FFFFFF"/>
 
-        <!-- Brush Resources -->
-        <LinearGradientBrush x:Key="ButtonGradient" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#9933AAFF" Offset="0"/>
-            <GradientStop Color="#660077DD" Offset="1"/>
+        <!-- Градиенты -->
+        <LinearGradientBrush x:Key="AeroButtonGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFB4E0FA" Offset="0"/>
+            <GradientStop Color="#FF4DAEEF" Offset="0.5"/>
+            <GradientStop Color="#FF0078D7" Offset="1"/>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="SliderFillBrush" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#7F33AAFF" Offset="0"/>
-            <GradientStop Color="#9F0088DD" Offset="1"/>
+        <LinearGradientBrush x:Key="AeroButtonHoverGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFB4E0FA" Offset="0"/>
+            <GradientStop Color="#FF6BC9FF" Offset="0.5"/>
+            <GradientStop Color="#FF0090F1" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- Button Style -->
-        <Style x:Key="RetroButtonStyle" TargetType="Button">
-            <Setter Property="FontWeight" Value="Bold"/>
+        <LinearGradientBrush x:Key="AeroButtonPressedGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF0090F1" Offset="0"/>
+            <GradientStop Color="#FF0078D7" Offset="0.5"/>
+            <GradientStop Color="#FF005A9E" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Эффекты -->
+        <DropShadowEffect x:Key="AeroGlowEffect" Color="#FF4DAEEF" BlurRadius="10" Opacity="0.6" ShadowDepth="0"/>
+        <DropShadowEffect x:Key="AeroHoverGlowEffect" Color="#FF4DAEEF" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
+        <DropShadowEffect x:Key="AeroTextGlowEffect" Color="#FF0078D7" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
+
+        <!-- Стиль кнопки -->
+        <Style x:Key="AeroButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="Width" Value="115"/>
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="12,8"/>
             <Setter Property="Margin" Value="8"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <!-- Button Background -->
-                            <Border x:Name="ButtonBorder" 
-                                    CornerRadius="8" 
-                                    Background="#7F14B4E6">
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#3366FF" ShadowDepth="0" BlurRadius="12" Opacity="0.7"/>
-                                </Border.Effect>
+                            <!-- Внешняя обводка -->
+                            <Border x:Name="OuterBorder" 
+                                CornerRadius="6" 
+                                BorderThickness="1" 
+                                BorderBrush="#80FFFFFF"
+                                Background="Transparent"
+                                Margin="-1"/>
 
-                                <!-- Gradient Overlay -->
-                                <Border CornerRadius="8">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#9933AAFF" Offset="0"/>
-                                            <GradientStop Color="#660077DD" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
+                            <!-- Основной фон -->
+                            <Border x:Name="ButtonBackground" 
+                                CornerRadius="6" 
+                                Background="{StaticResource AeroButtonGradient}"
+                                Effect="{StaticResource AeroGlowEffect}">
 
-                                    <!-- Glossy Highlight -->
-                                    <Grid>
-                                        <Border CornerRadius="8,8,0,0" 
-                                                Height="22"
-                                                VerticalAlignment="Top">
-                                            <Border.Background>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                    <GradientStop Color="#40FFFFFF" Offset="0"/>
-                                                    <GradientStop Color="#10FFFFFF" Offset="1"/>
-                                                </LinearGradientBrush>
-                                            </Border.Background>
-                                        </Border>
+                                <!-- Внутренняя обводка -->
+                                <Border CornerRadius="5" 
+                                    BorderThickness="1" 
+                                    BorderBrush="#A0FFFFFF"
+                                    Margin="1">
 
-                                        <!-- Content Presenter -->
+                                    <!-- Глянцевый эффект -->
+                                    <Border CornerRadius="5" Margin="1">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#40FFFFFF" Offset="0"/>
+                                                <GradientStop Color="#00FFFFFF" Offset="0.4"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+
+                                        <!-- Контент -->
                                         <ContentPresenter x:Name="contentPresenter" 
-                                                          HorizontalAlignment="Center" 
-                                                          VerticalAlignment="Center" 
-                                                          TextElement.FontWeight="{TemplateBinding FontWeight}"
-                                                          TextElement.FontFamily="{TemplateBinding FontFamily}"
-                                                          TextElement.Foreground="{TemplateBinding Foreground}"
-                                                          Margin="{TemplateBinding Padding}"/>
-                                    </Grid>
+                                                      HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center"
+                                                      RecognizesAccessKey="True"
+                                                      Margin="{TemplateBinding Padding}"/>
+                                    </Border>
                                 </Border>
                             </Border>
+
+                            <!-- Эффект нажатия -->
+                            <Border x:Name="RippleEffect" 
+                                CornerRadius="6" 
+                                Background="#20FFFFFF" 
+                                Opacity="0"/>
                         </Grid>
 
-                        <!-- Visual States -->
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#80FFFFFF" ShadowDepth="0" BlurRadius="20" Opacity="0.8"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#9F33CCFF"/>
+                                <Setter TargetName="ButtonBackground" Property="Background" Value="{StaticResource AeroButtonHoverGradient}"/>
+                                <Setter TargetName="ButtonBackground" Property="Effect" Value="{StaticResource AeroHoverGlowEffect}"/>
                             </Trigger>
+
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#7F0077DD"/>
-                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                <Setter TargetName="ButtonBackground" Property="Background" Value="{StaticResource AeroButtonPressedGradient}"/>
+                                <Setter TargetName="RippleEffect" Property="Opacity" Value="1"/>
+                                <Setter TargetName="contentPresenter" Property="RenderTransform">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#3366FF" ShadowDepth="0" BlurRadius="8" Opacity="0.5"/>
+                                        <TranslateTransform Y="1"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
+
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5"/>
-                                <Setter Property="Foreground" Value="#AAAAAA"/>
+                                <Setter TargetName="ButtonBackground" Property="Opacity" Value="0.6"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -109,12 +122,19 @@
             </Setter>
         </Style>
 
-        <!-- Обновленный стиль для слайдера -->
-        <Style x:Key="RetroSliderStyle" TargetType="Slider">
-            <Setter Property="Foreground" Value="#33AAFF"/>
+        <!-- Стиль для кнопки Play/Pause -->
+        <Style x:Key="AeroPlayButtonStyle" TargetType="Button" BasedOn="{StaticResource AeroButtonStyle}">
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Effect" Value="{StaticResource AeroHoverGlowEffect}"/>
+        </Style>
+
+        <!-- Стиль для слайдера -->
+        <Style x:Key="AeroSliderStyle" TargetType="Slider">
+            <Setter Property="Foreground" Value="{StaticResource AeroBlueBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Margin" Value="5"/>
             <Setter Property="IsMoveToPointEnabled" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -122,24 +142,22 @@
                         <Grid>
                             <!-- Фон слайдера -->
                             <Border x:Name="TrackBackground" 
-                            Height="8" 
-                            CornerRadius="4" 
-                            Background="#203366AA"
-                            Margin="0,5,0,5">
+                                Height="8" 
+                                CornerRadius="4" 
+                                Background="#203366AA">
                                 <Border.Effect>
-                                    <DropShadowEffect Color="#3366FF" ShadowDepth="0" BlurRadius="8" Opacity="0.3"/>
+                                    <DropShadowEffect Color="#3366FF" BlurRadius="5" Opacity="0.3" ShadowDepth="0"/>
                                 </Border.Effect>
                             </Border>
 
                             <!-- Заполненная часть -->
                             <Border x:Name="TrackFill"
-                            Height="8"
-                            CornerRadius="4"
-                            Background="{StaticResource SliderFillBrush}"
-                            HorizontalAlignment="Left"
-                            Margin="0,5,0,5">
+                                Height="8"
+                                CornerRadius="4"
+                                Background="{StaticResource AeroButtonGradient}"
+                                HorizontalAlignment="Left">
                                 <Border.Effect>
-                                    <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="5" Opacity="0.7"/>
+                                    <DropShadowEffect Color="#33AAFF" BlurRadius="5" Opacity="0.5" ShadowDepth="0"/>
                                 </Border.Effect>
                             </Border>
 
@@ -150,12 +168,12 @@
                                         <Thumb.Template>
                                             <ControlTemplate>
                                                 <Grid>
-                                                    <Ellipse Fill="#FFFFFF">
+                                                    <Ellipse Fill="White">
                                                         <Ellipse.Effect>
-                                                            <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="10" Opacity="0.8"/>
+                                                            <DropShadowEffect Color="#FF4DAEEF" BlurRadius="8" Opacity="0.8" ShadowDepth="0"/>
                                                         </Ellipse.Effect>
                                                     </Ellipse>
-                                                    <Ellipse Width="12" Height="12" Fill="#0088DD"/>
+                                                    <Ellipse Width="12" Height="12" Fill="#FF4DAEEF"/>
                                                 </Grid>
                                             </ControlTemplate>
                                         </Thumb.Template>
@@ -174,98 +192,66 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="VolumeSliderStyle" TargetType="Slider" BasedOn="{StaticResource RetroSliderStyle}">
-            <Setter Property="IsMoveToPointEnabled" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Slider">
-                        <Grid>
-                            <Border x:Name="TrackBackground" 
-                            Height="6" 
-                            CornerRadius="3" 
-                            Background="#203366AA"
-                            Margin="0,7,0,7">
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#3366FF" ShadowDepth="0" BlurRadius="5" Opacity="0.3"/>
-                                </Border.Effect>
-                            </Border>
 
-                            <Border x:Name="TrackFill"
-                            Height="6"
-                            CornerRadius="3"
-                            Background="{StaticResource SliderFillBrush}"
-                            HorizontalAlignment="Left"
-                            Margin="0,7,0,7">
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="5" Opacity="0.7"/>
-                                </Border.Effect>
-                            </Border>
-
-                            <Track x:Name="PART_Track">
-                                <Track.Thumb>
-                                    <Thumb x:Name="Thumb" Width="14" Height="14">
-                                        <Thumb.Template>
-                                            <ControlTemplate>
-                                                <Grid>
-                                                    <Ellipse Fill="#FFFFFF">
-                                                        <Ellipse.Effect>
-                                                            <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="8" Opacity="0.8"/>
-                                                        </Ellipse.Effect>
-                                                    </Ellipse>
-                                                    <Ellipse Width="10" Height="10" Fill="#0088DD"/>
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Thumb.Template>
-                                    </Thumb>
-                                </Track.Thumb>
-                            </Track>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Thumb" Property="Width" Value="16"/>
-                                <Setter TargetName="Thumb" Property="Height" Value="16"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Кнопка Mute/Unmute -->
-        <Style x:Key="MuteButtonStyle" TargetType="Button">
+        <!-- Стиль для кнопки громкости -->
+        <Style x:Key="AeroMuteButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
+                            <!-- Фон кнопки -->
+                            <Ellipse x:Name="ButtonBackground" 
+                                 Fill="#4033AAFF">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="#FF4DAEEF" BlurRadius="5" Opacity="0.5" ShadowDepth="0"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+
+                            <!-- Внутренний круг -->
+                            <Ellipse Margin="5" 
+                                 Stroke="#80FFFFFF" 
+                                 StrokeThickness="1" 
+                                 Fill="Transparent"/>
+
+                            <!-- Контент -->
                             <ContentPresenter x:Name="contentPresenter" 
-                                    HorizontalAlignment="Center" 
-                                    VerticalAlignment="Center"/>
-                            <Border x:Name="RippleEffect" 
-                            Opacity="0"
-                            Background="#40FFFFFF"
-                            CornerRadius="15"
-                            Width="0" Height="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
+
+                            <!-- Эффект нажатия -->
+                            <Ellipse x:Name="RippleEffect" 
+                                 Fill="#40FFFFFF"
+                                 Opacity="0"
+                                 Width="0" 
+                                 Height="0"/>
                         </Grid>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBackground" Property="Fill" Value="#6033AAFF"/>
                                 <Setter TargetName="contentPresenter" Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="10" Opacity="0.7"/>
+                                        <DropShadowEffect Color="#FF4DAEEF" BlurRadius="10" Opacity="0.7" ShadowDepth="0"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
+
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="RippleEffect" Property="Width" Value="40"/>
                                 <Setter TargetName="RippleEffect" Property="Height" Value="40"/>
-                                <Setter TargetName="RippleEffect" Property="Opacity" Value="0.5"/>
+                                <Setter TargetName="RippleEffect" Property="Opacity" Value="0.3"/>
+                                <Setter TargetName="contentPresenter" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="1"/>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -274,133 +260,136 @@
         </Style>
     </Window.Resources>
 
-    <!-- Main Background with Gradient -->
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF001428" Offset="0"/>
-                <GradientStop Color="#FF002A52" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-
-        <!-- Decorative Elements -->
-        <Canvas>
-            <!-- Retro circles decoration -->
-            <Ellipse Width="400" Height="400" Canvas.Left="-150" Canvas.Top="-150">
-                <Ellipse.Fill>
-                    <RadialGradientBrush>
-                        <GradientStop Color="#15FFFFFF" Offset="0"/>
-                        <GradientStop Color="#00FFFFFF" Offset="1"/>
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
-
-            <Ellipse Width="300" Height="300" Canvas.Right="-100" Canvas.Bottom="-100">
-                <Ellipse.Fill>
-                    <RadialGradientBrush>
-                        <GradientStop Color="#1533AAFF" Offset="0"/>
-                        <GradientStop Color="#00FFFFFF" Offset="1"/>
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
-        </Canvas>
-
-        <!-- Content with glassmorphism panel -->
-        <Border Margin="20" CornerRadius="20" Background="#30FFFFFF">
+    <!-- Основной фон с градиентом в стиле Frutiger Aero -->
+<Grid>
+    <Grid.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF0078D7" Offset="0"/>
+            <GradientStop Color="#FF4DAEEF" Offset="1"/>
+        </LinearGradientBrush>
+    </Grid.Background>
+    
+    <!-- Декоративные элементы -->
+    <Canvas>
+        <!-- Пузыри в стиле Aero -->
+        <Ellipse Width="300" Height="300" Canvas.Left="-100" Canvas.Top="-100">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#20FFFFFF" Offset="0"/>
+                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        
+        <Ellipse Width="200" Height="200" Canvas.Right="-50" Canvas.Bottom="-50">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#20B4E0FA" Offset="0"/>
+                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+    </Canvas>
+    
+    <!-- Основная панель с эффектом стекла -->
+    <Border Margin="20" CornerRadius="15" Background="#80FFFFFF">
+        <Border.Effect>
+            <BlurEffect Radius="0"/>
+        </Border.Effect>
+        
+        <Border CornerRadius="15" Background="#80FFFFFF">
             <Border.Effect>
-                <DropShadowEffect Color="#000000" ShadowDepth="5" BlurRadius="15" Opacity="0.5"/>
+                <DropShadowEffect Color="White" BlurRadius="20" Opacity="0.3" ShadowDepth="0"/>
             </Border.Effect>
-
+            
             <Grid Margin="15">
-                <!-- Header -->
+                <!-- Заголовок -->
                 <StackPanel VerticalAlignment="Top" Margin="0,20,0,30">
-                    <!-- Title -->
                     <TextBlock Text="DAPOL ULTIMATE PLAYER"
-                              FontSize="32"
-                              FontWeight="ExtraBold"
-                              FontFamily="Segoe UI"
-                              Foreground="#FFFFFF"
-                              HorizontalAlignment="Center">
+                               FontSize="32"
+                               FontWeight="Bold"
+                               FontFamily="Segoe UI Light"
+                               Foreground="White"
+                               HorizontalAlignment="Center">
                         <TextBlock.Effect>
-                            <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="15" Opacity="0.9"/>
+                            <DropShadowEffect Color="#FF0078D7" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
                         </TextBlock.Effect>
                     </TextBlock>
-
-                    <!-- Subtitle -->
+                    
                     <TextBlock Text="PREMIUM MUSIC EXPERIENCE"
-                              FontSize="14"
-                              FontWeight="Bold"
-                              FontFamily="Segoe UI"
-                              Foreground="#80FFFFFF"
-                              HorizontalAlignment="Center"
-                              Margin="0,5,0,0">
+                               FontSize="14"
+                               FontWeight="Bold"
+                               FontFamily="Segoe UI"
+                               Foreground="#C0FFFFFF"
+                               HorizontalAlignment="Center"
+                               Margin="0,5,0,0">
                         <TextBlock.Effect>
-                            <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="5" Opacity="0.5"/>
+                            <DropShadowEffect Color="#FF0078D7" BlurRadius="5" Opacity="0.5" ShadowDepth="0"/>
                         </TextBlock.Effect>
                     </TextBlock>
                 </StackPanel>
-
-                <!-- Track Display -->
-                <Border CornerRadius="12" 
-                        Margin="0,116,0,0" 
+                
+                <!-- Отображение трека -->
+                <Border CornerRadius="10" 
+                        Margin="0,100,0,0" 
                         Height="90" 
                         VerticalAlignment="Top"
-                        Background="#4033AAFF">
+                        Background="#804DAEEF">
                     <Border.Effect>
-                        <DropShadowEffect Color="#33AAFF" ShadowDepth="0" BlurRadius="15" Opacity="0.7"/>
+                        <DropShadowEffect Color="#FF4DAEEF" BlurRadius="15" Opacity="0.7" ShadowDepth="0"/>
                     </Border.Effect>
-
+                    
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <!-- Music Icon -->
-                        <Border Width="70" Height="70" Margin="15,0,0,0" CornerRadius="10" Background="#7F0088DD" VerticalAlignment="Center">
+                        
+                        <!-- Иконка музыки -->
+                        <Border Width="70" Height="70" Margin="15,0,0,0" CornerRadius="10" Background="#800078D7" VerticalAlignment="Center">
                             <TextBlock Text="♪" 
                                        FontSize="36" 
-                                       Foreground="#FFFFFF" 
+                                       Foreground="White" 
                                        HorizontalAlignment="Center" 
                                        VerticalAlignment="Center">
                                 <TextBlock.Effect>
-                                    <DropShadowEffect Color="#FFFFFF" ShadowDepth="0" BlurRadius="10" Opacity="0.7"/>
+                                    <DropShadowEffect Color="White" BlurRadius="10" Opacity="0.7" ShadowDepth="0"/>
                                 </TextBlock.Effect>
                             </TextBlock>
                         </Border>
-
-                        <!-- Track Info -->
+                        
+                        <!-- Информация о треке -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,15,0">
                             <TextBlock x:Name="TrackTitle"
                                        Text="No track loaded"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        FontFamily="Segoe UI"
-                                       Foreground="#FFFFFF"
+                                       Foreground="White"
                                        TextTrimming="CharacterEllipsis">
                                 <TextBlock.Effect>
-                                    <DropShadowEffect Color="#000000" ShadowDepth="1" BlurRadius="2" Opacity="0.7"/>
+                                    <DropShadowEffect Color="#40000000" BlurRadius="2" Opacity="0.7" ShadowDepth="1"/>
                                 </TextBlock.Effect>
                             </TextBlock>
-
+                            
                             <TextBlock x:Name="TrackArtist"
                                        Text="Unknown Artist"
                                        FontSize="16"
                                        FontFamily="Segoe UI"
-                                       Foreground="#CCFFFFFF"
+                                       Foreground="#E0FFFFFF"
                                        Margin="0,5,0,0"
                                        TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
-
-                        <!-- Time Display -->
+                        
+                        <!-- Отображение времени -->
                         <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,15,0">
                             <TextBlock x:Name="CurrentTimeText"
                                        Text="00:00"
                                        FontSize="18"
                                        FontFamily="Consolas"
                                        FontWeight="Bold"
-                                       Foreground="#FFFFFF"/>
+                                       Foreground="White"/>
                             <TextBlock Text="/"
                                        FontSize="18"
                                        FontFamily="Consolas"
@@ -416,21 +405,21 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-
-                <!-- Media Controls -->
+                
+                <!-- Элементы управления -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="0,40,0,0">
-                    <Button Content="⏮ PREV" Style="{StaticResource RetroButtonStyle}" Click="PreviousButton_Click"/>
-                    <Button Content="🔍 LOAD" Style="{StaticResource RetroButtonStyle}" Click="LoadFileButton_Click"/>
-                    <Button x:Name="PlayPauseButton" Content="⏯ PLAY" Style="{StaticResource RetroButtonStyle}" Click="PlayPauseButton_Click" Width="140"/>
-                    <Button Content="⏹ STOP" Style="{StaticResource RetroButtonStyle}" Click="StopButton_Click"/>
-                    <Button Content="⏭ NEXT" Style="{StaticResource RetroButtonStyle}" Click="NextButton_Click"/>
+                    <Button Content="⏮ PREV" Style="{StaticResource AeroButtonStyle}" Click="PreviousButton_Click"/>
+                    <Button Content="🔍 LOAD" Style="{StaticResource AeroButtonStyle}" Click="LoadFileButton_Click"/>
+                    <Button x:Name="PlayPauseButton" Content="⏯ PLAY" Style="{StaticResource AeroPlayButtonStyle}" Click="PlayPauseButton_Click"/>
+                    <Button Content="⏹ STOP" Style="{StaticResource AeroButtonStyle}" Click="StopButton_Click"/>
+                    <Button Content="⏭ NEXT" Style="{StaticResource AeroButtonStyle}" Click="NextButton_Click"/>
                 </StackPanel>
-
-                <!-- Progress Bar -->
-                <Border CornerRadius="12" 
+                
+                <!-- Прогресс-бар -->
+                <Border CornerRadius="10" 
                         Background="#20FFFFFF"
                         VerticalAlignment="Bottom"
                         Margin="0,0,0,120"
@@ -438,42 +427,42 @@
                     <Slider x:Name="SeekSlider"
                             Minimum="0"
                             Maximum="100"
-                            Style="{StaticResource RetroSliderStyle}"
+                            Style="{StaticResource AeroSliderStyle}"
                             ValueChanged="SeekSlider_ValueChanged"/>
                 </Border>
-
-                <!-- Volume Control -->
-                <!-- Volume Control -->
+                
+                <!-- Управление громкостью -->
                 <StackPanel Orientation="Horizontal"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            Margin="0,0,0,50">
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,0,50">
                     <Button x:Name="MuteButton" 
-            Content="🔊" 
-            Style="{StaticResource MuteButtonStyle}" 
-            Click="MuteButton_Click"
-            Margin="0,0,8,0"/>
-
+                            Content="🔊" 
+                            Style="{StaticResource AeroMuteButtonStyle}" 
+                            Click="MuteButton_Click"
+                            Margin="0,0,8,0"/>
+                    
                     <Slider x:Name="VolumeSlider"
-            Width="250" 
-            Minimum="0" 
-            Maximum="1"
-            ValueChanged="VolumeSlider_ValueChanged"
-            Value="0.5"
-            Style="{StaticResource VolumeSliderStyle}"/>
+                            Width="250" 
+                            Minimum="0" 
+                            Maximum="1"
+                            ValueChanged="VolumeSlider_ValueChanged"
+                            Value="0.5"
+                            Style="{StaticResource AeroSliderStyle}"/>
                 </StackPanel>
-
-                <!-- Decorative retro lines -->
+                
+                <!-- Декоративные линии -->
                 <Border BorderThickness="0,1,0,0" 
-                        BorderBrush="#2033AAFF" 
+                        BorderBrush="#40FFFFFF" 
                         VerticalAlignment="Bottom" 
                         Margin="50,0,50,90"/>
-
+                
                 <Border BorderThickness="0,1,0,0" 
-                        BorderBrush="#1033AAFF" 
+                        BorderBrush="#20FFFFFF" 
                         VerticalAlignment="Bottom" 
                         Margin="80,0,80,86"/>
             </Grid>
         </Border>
-    </Grid>
+    </Border>
+</Grid>
 </Window>
