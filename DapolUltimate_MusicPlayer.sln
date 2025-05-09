@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapolUltimate_MusicPlayer", "DapolUltimate_MusicPlayer\DapolUltimate_MusicPlayer.csproj", "{7193C883-1BF7-443F-97E3-5D41699B5143}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7193C883-1BF7-443F-97E3-5D41699B5143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7193C883-1BF7-443F-97E3-5D41699B5143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7193C883-1BF7-443F-97E3-5D41699B5143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7193C883-1BF7-443F-97E3-5D41699B5143}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1AC023C2-32E2-424A-B9BA-972DD28E0243}
+	EndGlobalSection
+EndGlobal
