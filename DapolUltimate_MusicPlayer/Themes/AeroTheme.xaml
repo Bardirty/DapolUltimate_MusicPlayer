@@ -1,0 +1,222 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="PrimaryColor">#FF4DAEEF</Color>
+    <Color x:Key="DarkPrimaryColor">#FF0078D7</Color>
+    <Color x:Key="LightPrimaryColor">#FFB4E0FA</Color>
+    <Color x:Key="DecoColor1">#20FFFFFF</Color>
+    <Color x:Key="DecoColor2">#20B4E0FA</Color>
+    <Color x:Key="PanelColor">#80FFFFFF</Color>
+    <Color x:Key="TrackPanelColor">#804DAEEF</Color>
+    <Color x:Key="SliderBackgroundColor">#20FFFFFF</Color>
+    <Color x:Key="MusicIconColor">#800078D7</Color>
+    <Color x:Key="DecorativeLineColor">#40FFFFFF</Color>
+    <Color x:Key="DecorativeLineLightColor">#20FFFFFF</Color>
+
+    <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource DarkPrimaryColor}" Offset="0"/>
+        <GradientStop Color="{StaticResource PrimaryColor}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFB4E0FA" Offset="0"/>
+        <GradientStop Color="#FF4DAEEF" Offset="0.5"/>
+        <GradientStop Color="#FF0078D7" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonHoverGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFB4E0FA" Offset="0"/>
+        <GradientStop Color="#FF6BC9FF" Offset="0.5"/>
+        <GradientStop Color="#FF0090F1" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonPressedGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF0090F1" Offset="0"/>
+        <GradientStop Color="#FF0078D7" Offset="0.5"/>
+        <GradientStop Color="#FF005A9E" Offset="1"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="PanelBrush" Color="{StaticResource PanelColor}"/>
+    <SolidColorBrush x:Key="TrackPanelBrush" Color="{StaticResource TrackPanelColor}"/>
+    <SolidColorBrush x:Key="SliderBackgroundBrush" Color="{StaticResource SliderBackgroundColor}"/>
+    <SolidColorBrush x:Key="MusicIconBrush" Color="{StaticResource MusicIconColor}"/>
+    <SolidColorBrush x:Key="DecorativeLineBrush" Color="{StaticResource DecorativeLineColor}"/>
+    <SolidColorBrush x:Key="DecorativeLineLightBrush" Color="{StaticResource DecorativeLineLightColor}"/>
+
+    <DropShadowEffect x:Key="GlowEffect" Color="#FF4DAEEF" BlurRadius="10" Opacity="0.6" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="HoverGlowEffect" Color="#FF4DAEEF" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="TextGlowEffect" Color="#FF0078D7" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="TextShadowEffect" Color="#40000000" BlurRadius="2" Opacity="0.7" ShadowDepth="1"/>
+    <DropShadowEffect x:Key="PanelShadowEffect" Color="White" BlurRadius="20" Opacity="0.3" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="TrackPanelShadowEffect" Color="#FF4DAEEF" BlurRadius="15" Opacity="0.7" ShadowDepth="0"/>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="OuterBorder" CornerRadius="6" BorderThickness="1" 
+                                BorderBrush="#80FFFFFF" Background="Transparent" Margin="-1"/>
+
+                        <Border x:Name="ButtonBackground" CornerRadius="6" 
+                                Background="{StaticResource ButtonGradient}" Effect="{StaticResource GlowEffect}">
+
+                            <Border CornerRadius="5" BorderThickness="1" BorderBrush="#A0FFFFFF" Margin="1">
+
+                                <Border CornerRadius="5" Margin="1">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#40FFFFFF" Offset="0"/>
+                                            <GradientStop Color="#00FFFFFF" Offset="0.4"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+
+                                    <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center" RecognizesAccessKey="True"
+                                                    Margin="{TemplateBinding Padding}"/>
+                                </Border>
+                            </Border>
+                        </Border>
+
+                        <Border x:Name="RippleEffect" CornerRadius="6" Background="#20FFFFFF" Opacity="0"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBackground" Property="Background" Value="{StaticResource ButtonHoverGradient}"/>
+                            <Setter TargetName="ButtonBackground" Property="Effect" Value="{StaticResource HoverGlowEffect}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBackground" Property="Background" Value="{StaticResource ButtonPressedGradient}"/>
+                            <Setter TargetName="RippleEffect" Property="Opacity" Value="1"/>
+                            <Setter TargetName="contentPresenter" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform Y="1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ButtonBackground" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PlayButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Padding" Value="16,10"/>
+        <Setter Property="Effect" Value="{StaticResource HoverGlowEffect}"/>
+    </Style>
+
+    <Style x:Key="SliderStyle" TargetType="Slider">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="IsMoveToPointEnabled" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Border x:Name="TrackBackground" Height="8" CornerRadius="4" Background="#203366AA">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#3366FF" BlurRadius="5" Opacity="0.3" ShadowDepth="0"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Border x:Name="TrackFill" Height="8" CornerRadius="4"
+                              Background="{StaticResource ButtonGradient}" HorizontalAlignment="Left">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#33AAFF" BlurRadius="5" Opacity="0.5" ShadowDepth="0"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Track x:Name="PART_Track">
+                            <Track.Thumb>
+                                <Thumb x:Name="Thumb" Width="16" Height="16">
+                                    <Thumb.Template>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Ellipse Fill="White">
+                                                    <Ellipse.Effect>
+                                                        <DropShadowEffect Color="#FF4DAEEF" BlurRadius="8" Opacity="0.8"/>
+                                                    </Ellipse.Effect>
+                                                </Ellipse>
+                                                <Ellipse Width="12" Height="12" Fill="#FF4DAEEF"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Thumb" Property="Width" Value="18"/>
+                            <Setter TargetName="Thumb" Property="Height" Value="18"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MuteButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="ButtonBackground" Fill="#4033AAFF">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="#FF4DAEEF" BlurRadius="5" Opacity="0.5"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+
+                        <Ellipse Margin="5" Stroke="#80FFFFFF" StrokeThickness="1" Fill="Transparent"/>
+
+                        <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <Ellipse x:Name="RippleEffect" Fill="#40FFFFFF" Opacity="0" Width="0" Height="0"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBackground" Property="Fill" Value="#6033AAFF"/>
+                            <Setter TargetName="contentPresenter" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FF4DAEEF" BlurRadius="10" Opacity="0.7"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="RippleEffect" Property="Width" Value="40"/>
+                            <Setter TargetName="RippleEffect" Property="Height" Value="40"/>
+                            <Setter TargetName="RippleEffect" Property="Opacity" Value="0.3"/>
+                            <Setter TargetName="contentPresenter" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform Y="1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
