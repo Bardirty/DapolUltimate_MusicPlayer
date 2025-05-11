@@ -3,12 +3,14 @@ using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace DapolUltimate_MusicPlayer {
@@ -113,42 +115,6 @@ namespace DapolUltimate_MusicPlayer {
                 PlaylistBox.SelectedIndex = currentTrackIndex;
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 StatusText.Text = $"Loaded {playlistPaths.Count} tracks";
-            }
-        }
-
-        private void LoadAndPlayFile(string filePath) {
-            try {
-                StopPlayback();
-
-                if (!File.Exists(filePath)) {
-                    StatusText.Text = "File not found";
-                    PlayNextTrack();
-                    return;
-                }
-
-                audioFile = new AudioFileReader(filePath);
-                outputDevice = new WaveOutEvent();
-                outputDevice.Init(audioFile);
-                outputDevice.Volume = (float)VolumeSlider.Value;
-
-                TrackTitle.Text = Path.GetFileNameWithoutExtension(filePath);
-                TrackArtist.Text = Path.GetDirectoryName(filePath);
-                SeekSlider.Maximum = audioFile.TotalTime.TotalSeconds;
-                SeekSlider.Value = 0;
-                TotalTimeText.Text = FormatTime(audioFile.TotalTime);
-                CurrentTimeText.Text = "00:00";
-
-                outputDevice.Play();
-                timer.Start();
-                isPlaying = true;
-                PlayPauseButton.Content = "⏸";
-
-                StatusText.Text = $"Now playing: {TrackTitle.Text}";
-            }
-            catch (Exception ex) {
-                MessageBox.Show($"Error loading file: {ex.Message}", "Error",
-                               MessageBoxButton.OK, MessageBoxImage.Error);
-                PlayNextTrack();
             }
         }
 
@@ -439,5 +405,75 @@ namespace DapolUltimate_MusicPlayer {
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        private ImageSource GetAlbumArt(string filePath) {
+            try {
+                var file = TagLib.File.Create(filePath);
+                var pictures = file.Tag.Pictures;
+
+                if (pictures != null && pictures.Length > 0) {
+                    using (var stream = new MemoryStream(pictures[0].Data.Data)) {
+                        var bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.StreamSource = stream;
+                        bitmap.EndInit();
+                        return bitmap;
+                    }
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Error extracting album art: {ex.Message}");
+            }
+
+            // Возвращаем null, если обложка не найдена
+            return null;
+        }
+        private void LoadAndPlayFile(string filePath) {
+            try {
+                StopPlayback();
+
+                if (!File.Exists(filePath)) {
+                    StatusText.Text = "File not found";
+                    PlayNextTrack();
+                    return;
+                }
+
+                audioFile = new AudioFileReader(filePath);
+                outputDevice = new WaveOutEvent();
+                outputDevice.Init(audioFile);
+                outputDevice.Volume = (float)VolumeSlider.Value;
+
+                TrackTitle.Text = Path.GetFileNameWithoutExtension(filePath);
+                TrackArtist.Text = Path.GetDirectoryName(filePath);
+                SeekSlider.Maximum = audioFile.TotalTime.TotalSeconds;
+                SeekSlider.Value = 0;
+                TotalTimeText.Text = FormatTime(audioFile.TotalTime);
+                CurrentTimeText.Text = "00:00";
+
+                // Извлечение обложки альбома
+                var albumArt = GetAlbumArt(filePath);
+                if (albumArt != null) {
+                    AlbumArtImage.Source = albumArt;
+                }
+                else {
+                    AlbumArtImage.Source = null; // Сбрасываем изображение, если обложка отсутствует
+                }
+
+                outputDevice.Play();
+                timer.Start();
+                isPlaying = true;
+                PlayPauseButton.Content = "⏸";
+
+                StatusText.Text = $"Now playing: {TrackTitle.Text}";
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"Error loading file: {ex.Message}", "Error",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
+                PlayNextTrack();
+            }
+        }
+
+
     }
 }

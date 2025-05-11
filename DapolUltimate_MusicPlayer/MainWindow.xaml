@@ -10,242 +10,14 @@
         Loaded="MainWindow_Loaded">
 
     <Window.Resources>
-        <!-- Цветовая палитра Frutiger Aero -->
-        <SolidColorBrush x:Key="AeroDeepBlue" Color="#FF0078D7"/>
-        <SolidColorBrush x:Key="AeroBrightBlue" Color="#FF4DAEEF"/>
-        <SolidColorBrush x:Key="AeroLightBlue" Color="#FFB4E0FA"/>
-        <SolidColorBrush x:Key="AeroGlassWhite" Color="#80FFFFFF"/>
-        <SolidColorBrush x:Key="AeroHighlight" Color="#40FFFFFF"/>
-        <SolidColorBrush x:Key="AeroDarkGlass" Color="#803366AA"/>
-
-        <!-- Градиенты -->
-        <LinearGradientBrush x:Key="AeroWindowBackground" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FF0066B4" Offset="0"/>
-            <GradientStop Color="#FF0078D7" Offset="0.3"/>
-            <GradientStop Color="#FF4DAEEF" Offset="0.7"/>
-            <GradientStop Color="#FFB4E0FA" Offset="1"/>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="AeroButtonGradient" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FFB4E0FA" Offset="0"/>
-            <GradientStop Color="#FF6FC7F7" Offset="0.4"/>
-            <GradientStop Color="#FF4DAEEF" Offset="0.5"/>
-            <GradientStop Color="#FF0078D7" Offset="1"/>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="AeroButtonPressed" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FF0078D7" Offset="0"/>
-            <GradientStop Color="#FF4DAEEF" Offset="0.6"/>
-            <GradientStop Color="#FFB4E0FA" Offset="1"/>
-        </LinearGradientBrush>
-
-        <!-- Стили -->
-        <Style x:Key="AeroButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="Margin" Value="8"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource AeroGlassWhite}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="MainBorder" 
-                                    CornerRadius="6" 
-                                    Background="{StaticResource AeroButtonGradient}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.5" Color="#FF0078D7"/>
-                                </Border.Effect>
-                                <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"
-                                              Margin="{TemplateBinding Padding}"/>
-                            </Border>
-                            <Border x:Name="HighlightBorder" 
-                                    CornerRadius="6" 
-                                    BorderBrush="{StaticResource AeroHighlight}"
-                                    BorderThickness="1"
-                                    Opacity="0"
-                                    IsHitTestVisible="False"/>
-                            <Border x:Name="GlassOverlay" 
-                                    CornerRadius="5" 
-                                    Background="{StaticResource AeroGlassWhite}"
-                                    Opacity="0.2"
-                                    Margin="1"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="MainBorder" Property="Opacity" Value="0.95"/>
-                                <Setter TargetName="HighlightBorder" Property="Opacity" Value="1"/>
-                                <Setter TargetName="GlassOverlay" Property="Opacity" Value="0.3"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource AeroButtonPressed}"/>
-                                <Setter TargetName="MainBorder" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TranslateTransform Y="1"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="GlassOverlay" Property="Opacity" Value="0.1"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="AeroRoundButtonStyle" TargetType="Button" BasedOn="{StaticResource AeroButtonStyle}">
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse x:Name="MainEllipse" 
-                                    Fill="{StaticResource AeroButtonGradient}"
-                                    Stroke="{StaticResource AeroGlassWhite}"
-                                    StrokeThickness="1">
-                                <Ellipse.Effect>
-                                    <DropShadowEffect BlurRadius="6" ShadowDepth="1" Opacity="0.4" Color="#FF0078D7"/>
-                                </Ellipse.Effect>
-                            </Ellipse>
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center"
-                                          RecognizesAccessKey="True"/>
-                            <Ellipse x:Name="HighlightEllipse" 
-                                    Stroke="{StaticResource AeroHighlight}"
-                                    StrokeThickness="1"
-                                    Opacity="0"
-                                    IsHitTestVisible="False"/>
-                            <Ellipse x:Name="GlassEllipse" 
-                                    Fill="{StaticResource AeroGlassWhite}"
-                                    Opacity="0.2"
-                                    Margin="1"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="MainEllipse" Property="Opacity" Value="0.95"/>
-                                <Setter TargetName="HighlightEllipse" Property="Opacity" Value="1"/>
-                                <Setter TargetName="GlassEllipse" Property="Opacity" Value="0.3"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="MainEllipse" Property="Fill" Value="{StaticResource AeroButtonPressed}"/>
-                                <Setter TargetName="MainEllipse" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TranslateTransform Y="1"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="GlassEllipse" Property="Opacity" Value="0.1"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="WindowControlButtonStyle" TargetType="Button" BasedOn="{StaticResource AeroRoundButtonStyle}">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="5,0,0,0"/>
-        </Style>
-
-        <Style x:Key="AeroListBoxItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Grid>
-                            <Border x:Name="MainBorder" 
-                                    CornerRadius="4" 
-                                    Background="Transparent"
-                                    BorderThickness="0">
-                                <Border.Effect>
-                                    <BlurEffect Radius="0"/>
-                                </Border.Effect>
-                                <ContentPresenter Margin="8,5"/>
-                            </Border>
-                            <Border x:Name="SelectionBorder" 
-                                    CornerRadius="4" 
-                                    Background="#604DAEEF"
-                                    BorderBrush="#80FFFFFF"
-                                    BorderThickness="1"
-                                    Opacity="0"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="SelectionBorder" Property="Opacity" Value="1"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="MainBorder" Property="Background" Value="#204DAEEF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="AeroSliderStyle" TargetType="Slider">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="10"/>
-            <Setter Property="IsMoveToPointEnabled" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Slider">
-                        <Grid>
-                            <Rectangle x:Name="TrackBackground" 
-                                   Fill="#400078D7" 
-                                   Height="4"
-                                   VerticalAlignment="Center"
-                                   RadiusX="2" RadiusY="2">
-                                <Rectangle.Effect>
-                                    <DropShadowEffect BlurRadius="2" ShadowDepth="0" Opacity="0.3" Color="#FF0078D7"/>
-                                </Rectangle.Effect>
-                            </Rectangle>
-
-                            <Rectangle x:Name="TrackFill" 
-                                   Fill="{StaticResource AeroBrightBlue}" 
-                                   Height="4"
-                                   VerticalAlignment="Center"
-                                   RadiusX="2" RadiusY="2"
-                                   HorizontalAlignment="Left"/>
-
-                            <Track x:Name="PART_Track">
-                                <Track.Thumb>
-                                    <Thumb Width="12" Height="12">
-                                        <Thumb.Template>
-                                            <ControlTemplate TargetType="Thumb">
-                                                <Ellipse Fill="White" 
-                                                     Stroke="{StaticResource AeroDeepBlue}" 
-                                                     StrokeThickness="1">
-                                                    <Ellipse.Effect>
-                                                        <DropShadowEffect BlurRadius="4" ShadowDepth="1" Opacity="0.5" Color="#FF0078D7"/>
-                                                    </Ellipse.Effect>
-                                                </Ellipse>
-                                            </ControlTemplate>
-                                        </Thumb.Template>
-                                    </Thumb>
-                                </Track.Thumb>
-                            </Track>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="BaseStyles.xaml"/>
+                <ResourceDictionary Source="/Themes/AeroTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
+
 
     <!-- Основной контейнер с эффектом стекла -->
     <Grid>
@@ -346,20 +118,21 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Обложка альбома -->
-                                    <Border Width="70" Height="70" Margin="15,0,0,0" 
-                                            CornerRadius="10" Background="#800078D7" 
-                                            VerticalAlignment="Center"
-                                            BorderBrush="#80FFFFFF"
-                                            BorderThickness="1">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.3" Color="#FF0078D7"/>
-                                        </Border.Effect>
-                                        <TextBlock Text="♪" 
-                                                   FontSize="36" 
-                                                   Foreground="White" 
-                                                   HorizontalAlignment="Center" 
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
+<Border Width="70" Height="70" Margin="15,0,0,0" 
+        CornerRadius="10" 
+        Background="#800078D7" 
+        VerticalAlignment="Center"
+        BorderBrush="#80FFFFFF"
+        BorderThickness="1"
+        ClipToBounds="True">
+    <Border.Clip>
+        <RectangleGeometry Rect="0,0,70,70" RadiusX="10" RadiusY="10"/>
+    </Border.Clip>
+    <Border.Effect>
+        <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.3" Color="#FF0078D7"/>
+    </Border.Effect>
+    <Image x:Name="AlbumArtImage" Stretch="UniformToFill"/>
+</Border>
 
                                     <!-- Информация о треке -->
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,15,0">
