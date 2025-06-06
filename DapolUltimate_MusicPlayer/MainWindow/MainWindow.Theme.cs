@@ -13,19 +13,16 @@ namespace DapolUltimate_MusicPlayer {
                 Resources.MergedDictionaries.Add(baseDict);
 
                 var themeDict = new ResourceDictionary();
-                switch (themeName.ToLower()) {
-                    case "aero":
-                        themeDict.Source = new Uri("pack://application:,,,/DapolUltimate_MusicPlayer;component/Themes/AeroTheme.xaml");
-                        break;
-                    case "flat":
-                        themeDict.Source = new Uri("pack://application:,,,/DapolUltimate_MusicPlayer;component/Themes/FlatTheme.xaml");
-                        break;
-                    case "dark":
-                        themeDict.Source = new Uri("pack://application:,,,/DapolUltimate_MusicPlayer;component/Themes/DarkTheme.xaml");
-                        break;
-                    default:
-                        themeDict.Source = new Uri("pack://application:,,,/DapolUltimate_MusicPlayer;component/Themes/AeroTheme.xaml");
-                        break;
+                var themePath = $"Themes/{themeName}Theme.xaml";
+                var uri = new Uri($"pack://application:,,,/DapolUltimate_MusicPlayer;component/{themePath}");
+
+                try {
+                    themeDict.Source = uri;
+                }
+                catch {
+                    // fallback to Aero if the requested theme doesn't exist
+                    themeDict.Source = new Uri("pack://application:,,,/DapolUltimate_MusicPlayer;component/Themes/AeroTheme.xaml");
+                    themeName = "Aero";
                 }
                 Resources.MergedDictionaries.Add(themeDict);
 

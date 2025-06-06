@@ -50,4 +50,20 @@
         <Setter Property="Margin" Value="5"/>
     </Style>
 
+    <!-- Style for the track information panel -->
+    <Style x:Key="TrackInfoPanelStyle" TargetType="Border">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource TrackInfoBackground}"/>
+    </Style>
+
+    <!-- Style for the album art container -->
+    <Style x:Key="AlbumArtBorderStyle" TargetType="Border">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource AlbumArtBackground}"/>
+    </Style>
+
 </ResourceDictionary>

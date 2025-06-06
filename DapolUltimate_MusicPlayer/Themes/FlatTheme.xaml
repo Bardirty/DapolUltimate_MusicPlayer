@@ -13,6 +13,13 @@
 
     <SolidColorBrush x:Key="ButtonGradient" Color="#FF1976D2"/>
 
+    <!-- Brushes used by the track information panel -->
+    <SolidColorBrush x:Key="TrackInfoBackground" Color="#801976D2"/>
+    <SolidColorBrush x:Key="AlbumArtBackground" Color="#801976D2"/>
+    <SolidColorBrush x:Key="TrackTextForeground" Color="White"/>
+    <SolidColorBrush x:Key="TrackArtistForeground" Color="#E0FFFFFF"/>
+    <SolidColorBrush x:Key="TimeSeparatorForeground" Color="#80FFFFFF"/>
+
     <Style x:Key="MainButtonStyle" TargetType="Button">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="{StaticResource ButtonGradient}"/>
@@ -27,7 +34,7 @@
 
     <Style x:Key="TrackInfoPanelStyle" TargetType="Border">
         <Setter Property="CornerRadius" Value="0"/>
-        <Setter Property="Background" Value="#801976D2"/>
+        <Setter Property="Background" Value="{DynamicResource TrackInfoBackground}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
