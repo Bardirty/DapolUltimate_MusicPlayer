@@ -17,6 +17,7 @@
     <SolidColorBrush x:Key="TrackTextForeground" Color="White"/>
     <SolidColorBrush x:Key="TrackArtistForeground" Color="#CCFFFFFF"/>
     <SolidColorBrush x:Key="TimeSeparatorForeground" Color="#88FFFFFF"/>
+    <SolidColorBrush x:Key="DarkGlass" Color="#802D2D30"/>
 
     <Style x:Key="MainButtonStyle" TargetType="Button">
         <Setter Property="Foreground" Value="White"/>
@@ -82,5 +83,69 @@
         <Setter Property="Background" Value="{DynamicResource TrackInfoBackground}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="TabControlStyle" TargetType="TabControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TabPanel x:Name="HeaderPanel"
+                                  Grid.Row="0"
+                                  Panel.ZIndex="1"
+                                  Margin="0,0,0,5"
+                                  IsItemsHost="True"/>
+
+                        <Border Grid.Row="1"
+                                Background="{StaticResource DarkGlass}"
+                                CornerRadius="5"
+                                BorderBrush="#80FFFFFF"
+                                BorderThickness="1">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TabItemStyle" TargetType="TabItem">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="border"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            CornerRadius="5,5,0,0">
+                        <ContentPresenter x:Name="content"
+                                         ContentSource="Header"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource ButtonGradient}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource SecondaryColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource SecondaryColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

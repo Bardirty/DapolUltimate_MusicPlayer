@@ -263,6 +263,42 @@
                                     </Grid>
                                 </Border>
                             </TabItem>
+                            <TabItem Header="YouTube" Style="{DynamicResource TabItemStyle}">
+                                <Border CornerRadius="10" Background="{DynamicResource DarkGlass}"
+                                        BorderBrush="#80FFFFFF" BorderThickness="1">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Color="#FF0078D7"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" Margin="10">
+                                            <TextBox x:Name="YouTubeSearchBox" Width="200" Style="{DynamicResource TextBoxStyle}"
+                                                     KeyDown="YouTubeSearchBox_KeyDown"/>
+                                            <Button Content="Search" Style="{DynamicResource ButtonStyle}" Margin="10,0,0,0"
+                                                    Click="YouTubeSearchButton_Click"/>
+                                        </StackPanel>
+
+                                        <ListBox x:Name="YouTubeResultsBox" Grid.Row="1" ItemsSource="{Binding YouTubeResults}"
+                                                 ItemContainerStyle="{DynamicResource ListBoxItemStyle}" Background="Transparent"
+                                                 BorderThickness="0">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Title}" Width="200" TextTrimming="CharacterEllipsis"/>
+                                                        <Button Content="↓" Width="25" Height="25" Margin="5,0,0,0"
+                                                                Style="{DynamicResource RoundButtonStyle}"
+                                                                Tag="{Binding}" Click="DownloadYouTubeButton_Click"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Grid>
+                                </Border>
+                            </TabItem>
                         </TabControl>
                     </Grid>
 
