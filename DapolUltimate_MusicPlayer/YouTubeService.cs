@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
+using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
@@ -15,10 +16,26 @@ namespace DapolUltimate_MusicPlayer {
             _client = new YoutubeClient();
         }
 
-        public async Task<List<Video>> SearchVideosAsync(string query, int limit = 20) {
-            var result = await _client.Search.GetVideosAsync(query).CollectAsync(limit);
-            return result.ToList();
+        public async Task<List<VideoSearchResult>> SearchVideosAsync(string query, int limit = 20) {
+            var results = new List<VideoSearchResult>();
+            var asyncEnum = _client.Search.GetVideosAsync(query).GetAsyncEnumerator();
+
+            try {
+                while (await asyncEnum.MoveNextAsync()) {
+                    results.Add(asyncEnum.Current);
+                    if (results.Count >= limit)
+                        break;
+                }
+            }
+            finally {
+                await asyncEnum.DisposeAsync();
+            }
+
+            return results;
         }
+
+
+
 
         public async Task<string> DownloadAudioAsync(string videoUrl, string savePath) {
             try {
