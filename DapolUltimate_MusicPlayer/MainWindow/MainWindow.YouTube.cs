@@ -54,16 +54,18 @@ namespace DapolUltimate_MusicPlayer {
                 if (dialog.ShowDialog() == true) {
                     StatusText.Text = "Downloading...";
                     var url = $"https://www.youtube.com/watch?v={video.Id}";
-                    var path = await youTubeService.DownloadAudioAsync(url, dialog.FileName);
-                    if (!string.IsNullOrEmpty(path)) {
-                        playlistPaths.Add(path);
+                    var result = await youTubeService.DownloadAudioAsync(url, dialog.FileName);
+                    if (!string.IsNullOrEmpty(result.Path)) {
+                        playlistPaths.Add(result.Path);
                         currentTrackIndex = playlistPaths.Count - 1;
                         OnPropertyChanged(nameof(PlaylistDisplayNames));
                         PlaylistBox.SelectedIndex = currentTrackIndex;
-                        LoadAndPlayFile(path);
+                        LoadAndPlayFile(result.Path);
                         StatusText.Text = $"Downloaded: {video.Title}";
                     } else {
                         StatusText.Text = "Download failed";
+                        if (!string.IsNullOrEmpty(result.Error))
+                            MessageBox.Show(result.Error, "Download Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -80,16 +82,18 @@ namespace DapolUltimate_MusicPlayer {
             var url = $"https://www.youtube.com/watch?v={video.Id}";
             var tempName = SanitizeFileName(video.Title) + ".tmp";
             var tempPath = Path.Combine(Path.GetTempPath(), tempName);
-            var path = await youTubeService.DownloadAudioAsync(url, tempPath);
-            if (!string.IsNullOrEmpty(path)) {
-                playlistPaths.Add(path);
+            var result = await youTubeService.DownloadAudioAsync(url, tempPath);
+            if (!string.IsNullOrEmpty(result.Path)) {
+                playlistPaths.Add(result.Path);
                 currentTrackIndex = playlistPaths.Count - 1;
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistBox.SelectedIndex = currentTrackIndex;
-                LoadAndPlayFile(path);
+                LoadAndPlayFile(result.Path);
                 StatusText.Text = $"Now playing: {video.Title}";
             } else {
                 StatusText.Text = "Playback failed";
+                if (!string.IsNullOrEmpty(result.Error))
+                    MessageBox.Show(result.Error, "Playback Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
