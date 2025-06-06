@@ -271,11 +271,12 @@
                                                 Style="{DynamicResource ButtonStyle}"
                                                 Click="YouTubeSearchButton_Click"/>
                                     </StackPanel>
-                                    <ListBox x:Name="YouTubeResultsBox"
+                                        <ListBox x:Name="YouTubeResultsBox"
                                              ItemsSource="{Binding YouTubeResults}"
                                              ItemContainerStyle="{DynamicResource ListBoxItemStyle}"
                                              Background="Transparent"
                                              BorderThickness="0"
+                                             Height="300"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
@@ -283,15 +284,18 @@
                                                     <TextBlock Text="{Binding Title}"
                                                                Width="200"
                                                                TextTrimming="CharacterEllipsis"/>
-                                                    <Button Content="Play"
-                                                            Style="{DynamicResource SmallButtonStyle}"
-                                                            Tag="{Binding}"
-                                                            Click="PlayYouTubeResult_Click"/>
-                                                    <Button Content="Download"
-                                                            Style="{DynamicResource SmallButtonStyle}"
-                                                            Tag="{Binding}"
-                                                            Margin="5,0,0,0"
-                                                            Click="DownloadYouTubeResult_Click"/>
+                                                    <StackPanel Orientation="Vertical"
+                                                                Margin="5,0,0,0">
+                                                        <Button Content="Play"
+                                                                Style="{DynamicResource SmallButtonStyle}"
+                                                                Tag="{Binding}"
+                                                                Click="PlayYouTubeResult_Click"/>
+                                                        <Button Content="Download"
+                                                                Style="{DynamicResource SmallButtonStyle}"
+                                                                Tag="{Binding}"
+                                                                Margin="0,5,0,0"
+                                                                Click="DownloadYouTubeResult_Click"/>
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
