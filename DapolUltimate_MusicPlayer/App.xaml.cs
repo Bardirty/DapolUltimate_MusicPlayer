@@ -11,5 +11,9 @@ namespace DapolUltimate_MusicPlayer {
     /// Логика взаимодействия для App.xaml
     /// </summary>
     public partial class App : Application {
+        public App() {
+            // Enable code pages support for TagLib when reading metadata
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+        }
     }
 }

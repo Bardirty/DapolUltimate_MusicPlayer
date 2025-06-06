@@ -35,11 +35,18 @@ namespace DapolUltimate_MusicPlayer {
             }
         }
 
+        private string SanitizeFileName(string name) {
+            foreach (var c in Path.GetInvalidFileNameChars()) {
+                name = name.Replace(c, '_');
+            }
+            return name;
+        }
+
         private async void DownloadYouTubeResult_Click(object sender, RoutedEventArgs e) {
             if (sender is Button button && button.Tag is Video video) {
                 var dialog = new SaveFileDialog {
                     Filter = "Audio files (*.mp3;*.m4a;*.webm)|*.mp3;*.m4a;*.webm|All files (*.*)|*.*",
-                    FileName = video.Title,
+                    FileName = SanitizeFileName(video.Title),
                     DefaultExt = ".mp3"
                 };
 
@@ -57,6 +64,21 @@ namespace DapolUltimate_MusicPlayer {
                     } else {
                         StatusText.Text = "Download failed";
                     }
+                }
+            }
+        }
+
+        private async void PlayYouTubeResult_Click(object sender, RoutedEventArgs e) {
+            if (sender is Button button && button.Tag is Video video) {
+                StatusText.Text = "Loading from YouTube...";
+                var url = $"https://www.youtube.com/watch?v={video.Id}";
+                var tempPath = Path.Combine(Path.GetTempPath(), SanitizeFileName(video.Id.Value) + ".tmp");
+                var path = await youTubeService.DownloadAudioAsync(url, tempPath);
+                if (!string.IsNullOrEmpty(path)) {
+                    LoadAndPlayFile(path);
+                    StatusText.Text = $"Now playing: {video.Title}";
+                } else {
+                    StatusText.Text = "Playback failed";
                 }
             }
         }

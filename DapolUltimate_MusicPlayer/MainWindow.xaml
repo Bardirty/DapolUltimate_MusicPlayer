@@ -280,7 +280,14 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Title}" Width="200" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding Title}"
+                                                               Width="200"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <Button Content="Play"
+                                                            Style="{DynamicResource ButtonStyle}"
+                                                            Tag="{Binding}"
+                                                            Margin="10,0,0,0"
+                                                            Click="PlayYouTubeResult_Click"/>
                                                     <Button Content="Download"
                                                             Style="{DynamicResource ButtonStyle}"
                                                             Tag="{Binding}"
