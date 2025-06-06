@@ -22,12 +22,8 @@ namespace DapolUltimate_MusicPlayer {
             try {
                 while (await asyncEnum.MoveNextAsync()) {
                     var searchResult = asyncEnum.Current;
-
-                    // получаем полноценное видео по ID
                     var fullVideo = await _client.Videos.GetAsync(searchResult.Id);
-
                     results.Add(fullVideo);
-
                     if (results.Count >= limit)
                         break;
                 }
@@ -39,13 +35,15 @@ namespace DapolUltimate_MusicPlayer {
             return results;
         }
 
-
-
         public async Task<string> DownloadAudioAsync(string videoUrl, string savePath) {
             try {
                 var videoId = VideoId.Parse(videoUrl);
                 var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
                 var streamInfo = manifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+
+                var extension = streamInfo.Container.Name;
+                if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
+                    savePath = Path.ChangeExtension(savePath, extension);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
                 await _client.Videos.Streams.DownloadAsync(streamInfo, savePath);

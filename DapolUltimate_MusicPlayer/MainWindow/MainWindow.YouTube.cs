@@ -38,8 +38,9 @@ namespace DapolUltimate_MusicPlayer {
         private async void DownloadYouTubeResult_Click(object sender, RoutedEventArgs e) {
             if (sender is Button button && button.Tag is Video video) {
                 var dialog = new SaveFileDialog {
-                    Filter = "MP3 files (*.mp3)|*.mp3|All files (*.*)|*.*",
-                    FileName = video.Title + ".mp3"
+                    Filter = "Audio files (*.mp3;*.m4a;*.webm)|*.mp3;*.m4a;*.webm|All files (*.*)|*.*",
+                    FileName = video.Title,
+                    DefaultExt = ".mp3"
                 };
 
                 if (dialog.ShowDialog() == true) {
@@ -48,10 +49,12 @@ namespace DapolUltimate_MusicPlayer {
                     var path = await youTubeService.DownloadAudioAsync(url, dialog.FileName);
                     if (!string.IsNullOrEmpty(path)) {
                         playlistPaths.Add(path);
+                        currentTrackIndex = playlistPaths.Count - 1;
                         OnPropertyChanged(nameof(PlaylistDisplayNames));
+                        PlaylistBox.SelectedIndex = currentTrackIndex;
+                        LoadAndPlayFile(path);
                         StatusText.Text = $"Downloaded: {video.Title}";
-                    }
-                    else {
+                    } else {
                         StatusText.Text = "Download failed";
                     }
                 }
