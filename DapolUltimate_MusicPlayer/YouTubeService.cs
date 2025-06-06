@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
-using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
@@ -16,13 +15,19 @@ namespace DapolUltimate_MusicPlayer {
             _client = new YoutubeClient();
         }
 
-        public async Task<List<VideoSearchResult>> SearchVideosAsync(string query, int limit = 20) {
-            var results = new List<VideoSearchResult>();
+        public async Task<List<Video>> SearchVideosAsync(string query, int limit = 20) {
+            var results = new List<Video>();
             var asyncEnum = _client.Search.GetVideosAsync(query).GetAsyncEnumerator();
 
             try {
                 while (await asyncEnum.MoveNextAsync()) {
-                    results.Add(asyncEnum.Current);
+                    var searchResult = asyncEnum.Current;
+
+                    // получаем полноценное видео по ID
+                    var fullVideo = await _client.Videos.GetAsync(searchResult.Id);
+
+                    results.Add(fullVideo);
+
                     if (results.Count >= limit)
                         break;
                 }
@@ -33,7 +38,6 @@ namespace DapolUltimate_MusicPlayer {
 
             return results;
         }
-
 
 
 

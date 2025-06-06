@@ -266,7 +266,7 @@
                             <TabItem Header="YouTube" Style="{DynamicResource TabItemStyle}">
                                 <StackPanel Margin="10">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBox x:Name="YouTubeSearchBox" Width="200" Margin="0,0,10,0"/>
+                                        <TextBox x:Name="YouTubeSearchBox" Width="175" Margin="0,0,10,0" Height="36"/>
                                         <Button Content="Search"
                                                 Style="{DynamicResource ButtonStyle}"
                                                 Click="YouTubeSearchButton_Click"/>
