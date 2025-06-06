@@ -282,7 +282,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Title}"
-                                                               Width="220"
+                                                               Width="180"
                                                                TextTrimming="CharacterEllipsis"
                                                                VerticalAlignment="Center"/>
                                                     <StackPanel Orientation="Vertical"
