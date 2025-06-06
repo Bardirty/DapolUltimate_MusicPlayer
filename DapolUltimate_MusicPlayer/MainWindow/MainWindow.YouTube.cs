@@ -2,6 +2,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using YoutubeExplode.Videos;
@@ -70,21 +71,31 @@ namespace DapolUltimate_MusicPlayer {
 
         private async void PlayYouTubeResult_Click(object sender, RoutedEventArgs e) {
             if (sender is Button button && button.Tag is Video video) {
-                StatusText.Text = "Loading from YouTube...";
-                var url = $"https://www.youtube.com/watch?v={video.Id}";
-                var tempName = SanitizeFileName(video.Title) + ".tmp";
-                var tempPath = Path.Combine(Path.GetTempPath(), tempName);
-                var path = await youTubeService.DownloadAudioAsync(url, tempPath);
-                if (!string.IsNullOrEmpty(path)) {
-                    playlistPaths.Add(path);
-                    currentTrackIndex = playlistPaths.Count - 1;
-                    OnPropertyChanged(nameof(PlaylistDisplayNames));
-                    PlaylistBox.SelectedIndex = currentTrackIndex;
-                    LoadAndPlayFile(path);
-                    StatusText.Text = $"Now playing: {video.Title}";
-                } else {
-                    StatusText.Text = "Playback failed";
-                }
+                await PlayYouTubeVideoAsync(video);
+            }
+        }
+
+        private async Task PlayYouTubeVideoAsync(Video video) {
+            StatusText.Text = "Loading from YouTube...";
+            var url = $"https://www.youtube.com/watch?v={video.Id}";
+            var tempName = SanitizeFileName(video.Title) + ".tmp";
+            var tempPath = Path.Combine(Path.GetTempPath(), tempName);
+            var path = await youTubeService.DownloadAudioAsync(url, tempPath);
+            if (!string.IsNullOrEmpty(path)) {
+                playlistPaths.Add(path);
+                currentTrackIndex = playlistPaths.Count - 1;
+                OnPropertyChanged(nameof(PlaylistDisplayNames));
+                PlaylistBox.SelectedIndex = currentTrackIndex;
+                LoadAndPlayFile(path);
+                StatusText.Text = $"Now playing: {video.Title}";
+            } else {
+                StatusText.Text = "Playback failed";
+            }
+        }
+
+        private async void YouTubeResultsBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            if (YouTubeResultsBox.SelectedItem is Video video) {
+                await PlayYouTubeVideoAsync(video);
             }
         }
     }

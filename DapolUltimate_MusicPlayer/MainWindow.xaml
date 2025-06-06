@@ -277,12 +277,13 @@
                                              Background="Transparent"
                                              BorderThickness="0"
                                              Height="300"
-                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                             MouseDoubleClick="YouTubeResultsBox_MouseDoubleClick">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Title}"
-                                                               Width="180"
+                                                               Width="160"
                                                                TextTrimming="CharacterEllipsis"
                                                                VerticalAlignment="Center"/>
                                                     <StackPanel Orientation="Vertical"
