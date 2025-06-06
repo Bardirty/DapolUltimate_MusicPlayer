@@ -29,6 +29,8 @@ namespace DapolUltimate_MusicPlayer {
         private double volumeBeforeMute = 0.5;
         private List<string> playlistPaths = new List<string>();
         private int currentTrackIndex = -1;
+        private readonly YouTubeService youTubeService = new YouTubeService();
+        public System.Collections.Generic.List<YouTubeVideo> YouTubeResults { get; private set; } = new System.Collections.Generic.List<YouTubeVideo>();
 
         public List<string> PlaylistDisplayNames =>
             playlistPaths.Select(Path.GetFileNameWithoutExtension).ToList();
