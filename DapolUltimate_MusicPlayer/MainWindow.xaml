@@ -56,7 +56,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <StatusBar Grid.Row="3" Background="#405078D7"
+                    <StatusBar Grid.Row="2" Background="#405078D7"
                                BorderBrush="#80FFFFFF"
                                BorderThickness="0,1,0,0">
                         <StatusBarItem>
@@ -266,7 +266,7 @@
                             <TabItem Header="YouTube" Style="{DynamicResource TabItemStyle}">
                                 <StackPanel Margin="10">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBox x:Name="YouTubeSearchBox" Width="200" Margin="0,0,10,0"/>
+                                        <TextBox x:Name="YouTubeSearchBox" Width="175" Margin="0,0,10,0" Height="36"/>
                                         <Button Content="Search"
                                                 Style="{DynamicResource ButtonStyle}"
                                                 Click="YouTubeSearchButton_Click"/>
