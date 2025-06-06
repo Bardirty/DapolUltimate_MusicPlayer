@@ -35,7 +35,7 @@ namespace DapolUltimate_MusicPlayer {
             return results;
         }
 
-        public async Task<string> DownloadAudioAsync(string videoUrl, string savePath) {
+        public async Task<(string Path, string Error)> DownloadAudioAsync(string videoUrl, string savePath) {
             try {
                 var videoId = VideoId.Parse(videoUrl);
                 var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
@@ -53,11 +53,11 @@ namespace DapolUltimate_MusicPlayer {
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
                 await _client.Videos.Streams.DownloadAsync(streamInfo, savePath);
 
-                return savePath;
+                return (savePath, null);
             }
             catch (Exception ex) {
                 Console.WriteLine($"Error downloading video: {ex.Message}");
-                return null;
+                return (null, ex.Message);
             }
         }
     }
