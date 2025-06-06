@@ -282,15 +282,19 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Title}"
-                                                               Width="200"
-                                                               TextTrimming="CharacterEllipsis"/>
+                                                               Width="220"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               VerticalAlignment="Center"/>
                                                     <StackPanel Orientation="Vertical"
-                                                                Margin="5,0,0,0">
-                                                        <Button Content="Play"
+                                                                Margin="10,0,0,0"
+                                                                HorizontalAlignment="Center">
+                                                        <Button Content="▶"
+                                                                Width="50"
                                                                 Style="{DynamicResource SmallButtonStyle}"
                                                                 Tag="{Binding}"
                                                                 Click="PlayYouTubeResult_Click"/>
-                                                        <Button Content="Download"
+                                                        <Button Content="↓"
+                                                                Width="50"
                                                                 Style="{DynamicResource SmallButtonStyle}"
                                                                 Tag="{Binding}"
                                                                 Margin="0,5,0,0"
