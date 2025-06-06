@@ -126,6 +126,13 @@
         </Setter>
     </Style>
 
+    <!-- Compact button for list items -->
+    <Style x:Key="SmallButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Margin" Value="4"/>
+    </Style>
+
     <Style x:Key="RoundButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Width" Value="44"/>
         <Setter Property="Height" Value="44"/>

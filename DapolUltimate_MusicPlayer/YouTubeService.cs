@@ -39,7 +39,12 @@ namespace DapolUltimate_MusicPlayer {
             try {
                 var videoId = VideoId.Parse(videoUrl);
                 var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
-                var streamInfo = manifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+
+                var audioStreams = manifest.GetAudioOnlyStreams();
+                var streamInfo = audioStreams
+                    .Where(s => s.Container == Container.Mp4)
+                    .GetWithHighestBitrate() ??
+                    audioStreams.GetWithHighestBitrate();
 
                 var extension = streamInfo.Container.Name;
                 if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))

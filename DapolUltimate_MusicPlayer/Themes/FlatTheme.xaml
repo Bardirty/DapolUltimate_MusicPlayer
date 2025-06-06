@@ -30,6 +30,13 @@
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
+    <!-- Compact button for list items -->
+    <Style x:Key="SmallButtonStyle" TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Margin" Value="4"/>
+    </Style>
+
     <!-- Стиль для круглых кнопок (плей, стоп и т.д.) -->
     <Style x:Key="RoundButtonStyle" TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
         <Setter Property="Width" Value="44"/>

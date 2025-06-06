@@ -284,14 +284,13 @@
                                                                Width="200"
                                                                TextTrimming="CharacterEllipsis"/>
                                                     <Button Content="Play"
-                                                            Style="{DynamicResource ButtonStyle}"
+                                                            Style="{DynamicResource SmallButtonStyle}"
                                                             Tag="{Binding}"
-                                                            Margin="10,0,0,0"
                                                             Click="PlayYouTubeResult_Click"/>
                                                     <Button Content="Download"
-                                                            Style="{DynamicResource ButtonStyle}"
+                                                            Style="{DynamicResource SmallButtonStyle}"
                                                             Tag="{Binding}"
-                                                            Margin="10,0,0,0"
+                                                            Margin="5,0,0,0"
                                                             Click="DownloadYouTubeResult_Click"/>
                                                 </StackPanel>
                                             </DataTemplate>
