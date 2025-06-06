@@ -263,6 +263,35 @@
                                     </Grid>
                                 </Border>
                             </TabItem>
+                            <TabItem Header="YouTube" Style="{DynamicResource TabItemStyle}">
+                                <StackPanel Margin="10">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBox x:Name="YouTubeSearchBox" Width="200" Margin="0,0,10,0"/>
+                                        <Button Content="Search"
+                                                Style="{DynamicResource ButtonStyle}"
+                                                Click="YouTubeSearchButton_Click"/>
+                                    </StackPanel>
+                                    <ListBox x:Name="YouTubeResultsBox"
+                                             ItemsSource="{Binding YouTubeResults}"
+                                             ItemContainerStyle="{DynamicResource ListBoxItemStyle}"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Title}" Width="200" TextTrimming="CharacterEllipsis"/>
+                                                    <Button Content="Download"
+                                                            Style="{DynamicResource ButtonStyle}"
+                                                            Tag="{Binding}"
+                                                            Margin="10,0,0,0"
+                                                            Click="DownloadYouTubeResult_Click"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+                            </TabItem>
                         </TabControl>
                     </Grid>
 
