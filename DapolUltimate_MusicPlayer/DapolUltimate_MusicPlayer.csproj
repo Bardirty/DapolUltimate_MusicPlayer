@@ -130,8 +130,8 @@
     <Reference Include="TagLibSharp, Version=2.3.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>..\packages\TagLibSharp.2.3.0\lib\net462\TagLibSharp.dll</HintPath>
     </Reference>
-    <Reference Include="YoutubeExplode, Version=7.0.6.0, Culture=neutral, PublicKeyToken=null, processorArchitecture=MSIL">
-      <HintPath>..\packages\YoutubeExplode.7.0.6\lib\net462\YoutubeExplode.dll</HintPath>
+    <Reference Include="YoutubeExplode, Version=7.1.0.0, Culture=neutral, PublicKeyToken=null, processorArchitecture=MSIL">
+      <HintPath>..\packages\YoutubeExplode.7.1.0\lib\net462\YoutubeExplode.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
