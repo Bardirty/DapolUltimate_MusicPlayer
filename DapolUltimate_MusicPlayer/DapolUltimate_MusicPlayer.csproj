@@ -130,6 +130,9 @@
     <Reference Include="TagLibSharp, Version=2.3.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>..\packages\TagLibSharp.2.3.0\lib\net462\TagLibSharp.dll</HintPath>
     </Reference>
+    <Reference Include="YoutubeExplode">
+      <HintPath>..\packages\YoutubeExplode.6.5.4\lib\netstandard2.0\YoutubeExplode.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -140,6 +143,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SoundCloudService.cs" />
+    <Compile Include="YouTubeService.cs" />
     <Page Include="BaseStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
