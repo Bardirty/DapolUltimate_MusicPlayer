@@ -72,9 +72,14 @@ namespace DapolUltimate_MusicPlayer {
             if (sender is Button button && button.Tag is Video video) {
                 StatusText.Text = "Loading from YouTube...";
                 var url = $"https://www.youtube.com/watch?v={video.Id}";
-                var tempPath = Path.Combine(Path.GetTempPath(), SanitizeFileName(video.Id.Value) + ".tmp");
+                var tempName = SanitizeFileName(video.Title) + ".tmp";
+                var tempPath = Path.Combine(Path.GetTempPath(), tempName);
                 var path = await youTubeService.DownloadAudioAsync(url, tempPath);
                 if (!string.IsNullOrEmpty(path)) {
+                    playlistPaths.Add(path);
+                    currentTrackIndex = playlistPaths.Count - 1;
+                    OnPropertyChanged(nameof(PlaylistDisplayNames));
+                    PlaylistBox.SelectedIndex = currentTrackIndex;
                     LoadAndPlayFile(path);
                     StatusText.Text = $"Now playing: {video.Title}";
                 } else {
