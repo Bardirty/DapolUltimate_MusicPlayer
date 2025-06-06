@@ -20,6 +20,10 @@ namespace DapolUltimate_MusicPlayer {
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) {
+            // Ignore hotkeys when typing in text boxes so space characters work
+            if (Keyboard.FocusedElement is TextBox)
+                return;
+
             if (e.Key == Key.Space) {
                 PlayPauseButton_Click(null, null);
                 e.Handled = true;
