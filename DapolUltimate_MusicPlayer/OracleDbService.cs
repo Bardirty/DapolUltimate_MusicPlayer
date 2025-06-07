@@ -24,8 +24,8 @@ BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE TRACKS (
             ID NUMBER PRIMARY KEY,
-            TITLE VARCHAR2(400),
-            PATH VARCHAR2(1024),
+            TITLE NVARCHAR2(400),
+            PATH NVARCHAR2(1024),
             IS_YOUTUBE NUMBER(1),
             CREATED_AT TIMESTAMP
         )';
@@ -60,7 +60,7 @@ BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE PLAYLISTS (
             ID NUMBER PRIMARY KEY,
-            NAME VARCHAR2(200)
+            NAME NVARCHAR2(200)
         )';
 EXCEPTION
     WHEN OTHERS THEN
