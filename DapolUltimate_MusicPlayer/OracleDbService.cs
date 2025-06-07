@@ -9,6 +9,12 @@ namespace DapolUltimate_MusicPlayer {
 
         public OracleDbService() {
             _connectionString = ConfigurationManager.ConnectionStrings["OracleDb"]?.ConnectionString;
+            if (string.IsNullOrWhiteSpace(_connectionString) || _connectionString.Contains("{ORACLE_CONNECTION_STRING}")) {
+                var env = Environment.GetEnvironmentVariable("ORACLE_CONNECTION_STRING");
+                if (string.IsNullOrWhiteSpace(env))
+                    throw new InvalidOperationException("Oracle connection string not configured. Set ORACLE_CONNECTION_STRING environment variable.");
+                _connectionString = env;
+            }
         }
 
         private OracleConnection GetConnection() => new OracleConnection(_connectionString);
@@ -18,7 +24,7 @@ namespace DapolUltimate_MusicPlayer {
                 conn.Open();
 
                 using (var cmd = conn.CreateCommand()) {
-                    // Создание таблицы TRACKS
+                    // Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» TRACKS
                     cmd.CommandText = @"
 BEGIN
     EXECUTE IMMEDIATE '
@@ -37,7 +43,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
-                    // Создание SEQUENCE TRACKS_SEQ
+                    // Г‘Г®Г§Г¤Г Г­ГЁГҐ SEQUENCE TRACKS_SEQ
                     cmd.CommandText = @"
 BEGIN
     EXECUTE IMMEDIATE '

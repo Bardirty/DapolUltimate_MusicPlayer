@@ -251,7 +251,12 @@ namespace DapolUltimate_MusicPlayer {
 
                 if (!File.Exists(filePath)) {
                     StatusText.Text = "File not found";
-                    PlayNextTrack();
+                    if (playlistPaths.Count > 1) {
+                        PlayNextTrack();
+                    }
+                    else {
+                        ResetPlayerState();
+                    }
                     return;
                 }
 
@@ -281,7 +286,12 @@ namespace DapolUltimate_MusicPlayer {
             catch (Exception ex) {
                 MessageBox.Show($"Error loading file: {ex.Message}", "Error",
                                MessageBoxButton.OK, MessageBoxImage.Error);
-                PlayNextTrack();
+                if (playlistPaths.Count > 1) {
+                    PlayNextTrack();
+                }
+                else {
+                    ResetPlayerState();
+                }
             }
         }
 

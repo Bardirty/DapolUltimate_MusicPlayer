@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
+using YoutubeExplode.Converter;
 
 namespace DapolUltimate_MusicPlayer {
     public class YouTubeService {
@@ -41,18 +42,19 @@ namespace DapolUltimate_MusicPlayer {
                 var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
 
                 var audioStreams = manifest.GetAudioOnlyStreams();
-                var streamInfo = audioStreams
-                    .Where(s => s.Container == Container.Mp4)
-                    .GetWithHighestBitrate() ??
-                    audioStreams.GetWithHighestBitrate();
+                var mp4Stream = audioStreams.Where(s => s.Container == Container.Mp4).GetWithHighestBitrate();
+                if (mp4Stream != null) {
+                    var extension = mp4Stream.Container.Name;
+                    if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
+                        savePath = Path.ChangeExtension(savePath, extension);
+                    Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+                    await _client.Videos.Streams.DownloadAsync(mp4Stream, savePath);
+                    return savePath;
+                }
 
-                var extension = streamInfo.Container.Name;
-                if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
-                    savePath = Path.ChangeExtension(savePath, extension);
-
+                savePath = Path.ChangeExtension(savePath, "mp3");
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
-                await _client.Videos.Streams.DownloadAsync(streamInfo, savePath);
-
+                await _client.Videos.DownloadAsync(videoId, savePath, builder => builder.SetContainer("mp3"));
                 return savePath;
             }
             catch (Exception ex) {
