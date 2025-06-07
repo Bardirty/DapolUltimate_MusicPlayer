@@ -153,6 +153,8 @@
     </ApplicationDefinition>
     <Compile Include="SoundCloudService.cs" />
     <Compile Include="YouTubeService.cs" />
+    <Compile Include="OracleDbService.cs" />
+    <Compile Include="TrackInfo.cs" />
     <Page Include="BaseStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -28,7 +28,9 @@ namespace DapolUltimate_MusicPlayer {
         private bool isMuted = false;
         private double volumeBeforeMute = 0.5;
         private List<string> playlistPaths = new List<string>();
+        private List<int> playlistIds = new List<int>();
         private int currentTrackIndex = -1;
+        private readonly OracleDbService dbService = new OracleDbService();
 
         public List<string> PlaylistDisplayNames =>
             playlistPaths.Select(Path.GetFileNameWithoutExtension).ToList();
@@ -55,6 +57,17 @@ namespace DapolUltimate_MusicPlayer {
             InitializeTimer();
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
             DataContext = this;
+
+            try {
+                dbService.EnsureTableExists();
+                var tracks = dbService.LoadTracks();
+                playlistPaths = tracks.Select(t => t.Path).ToList();
+                playlistIds = tracks.Select(t => t.Id).ToList();
+                OnPropertyChanged(nameof(PlaylistDisplayNames));
+            }
+            catch (Exception ex) {
+                LogError(ex);
+            }
         }
 
         private void LogError(Exception ex) {

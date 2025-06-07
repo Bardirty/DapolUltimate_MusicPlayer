@@ -50,7 +50,18 @@ namespace DapolUltimate_MusicPlayer {
             };
 
             if (dialog.ShowDialog() == true) {
-                playlistPaths = dialog.FileNames.ToList();
+                playlistPaths.Clear();
+                playlistIds.Clear();
+                foreach (var file in dialog.FileNames) {
+                    var id = dbService.AddTrack(new TrackInfo {
+                        Title = Path.GetFileNameWithoutExtension(file),
+                        Path = file,
+                        IsYouTube = false,
+                        CreatedAt = DateTime.Now
+                    });
+                    playlistPaths.Add(file);
+                    playlistIds.Add(id);
+                }
                 currentTrackIndex = 0;
                 LoadAndPlayFile(playlistPaths[currentTrackIndex]);
                 PlaylistBox.SelectedIndex = currentTrackIndex;

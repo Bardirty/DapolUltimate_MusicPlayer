@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Windows;
 using Microsoft.Win32;
+using System.IO;
 
 namespace DapolUltimate_MusicPlayer {
     public partial class MainWindow {
@@ -20,9 +21,19 @@ namespace DapolUltimate_MusicPlayer {
             };
 
             if (dialog.ShowDialog() == true && dialog.FileNames.Length > 0) {
-                playlistPaths.AddRange(dialog.FileNames.Except(playlistPaths));
+                var newPaths = dialog.FileNames.Except(playlistPaths).ToList();
+                foreach (var path in newPaths) {
+                    var id = dbService.AddTrack(new TrackInfo {
+                        Title = Path.GetFileNameWithoutExtension(path),
+                        Path = path,
+                        IsYouTube = false,
+                        CreatedAt = DateTime.Now
+                    });
+                    playlistPaths.Add(path);
+                    playlistIds.Add(id);
+                }
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
-                StatusText.Text = $"Added {dialog.FileNames.Length} tracks";
+                StatusText.Text = $"Added {newPaths.Count} tracks";
             }
         }
 
@@ -40,7 +51,9 @@ namespace DapolUltimate_MusicPlayer {
                     ResetPlayerState();
                 }
 
+                dbService.DeleteTrack(playlistIds[selectedIndex]);
                 playlistPaths.RemoveAt(selectedIndex);
+                playlistIds.RemoveAt(selectedIndex);
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
 
                 if (currentTrackIndex > selectedIndex) {

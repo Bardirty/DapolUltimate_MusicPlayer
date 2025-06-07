@@ -56,7 +56,14 @@ namespace DapolUltimate_MusicPlayer {
                     var url = $"https://www.youtube.com/watch?v={video.Id}";
                     var path = await youTubeService.DownloadAudioAsync(url, dialog.FileName);
                     if (!string.IsNullOrEmpty(path)) {
+                        var id = dbService.AddTrack(new TrackInfo {
+                            Title = video.Title,
+                            Path = path,
+                            IsYouTube = true,
+                            CreatedAt = DateTime.Now
+                        });
                         playlistPaths.Add(path);
+                        playlistIds.Add(id);
                         currentTrackIndex = playlistPaths.Count - 1;
                         OnPropertyChanged(nameof(PlaylistDisplayNames));
                         PlaylistBox.SelectedIndex = currentTrackIndex;
@@ -82,7 +89,14 @@ namespace DapolUltimate_MusicPlayer {
             var tempPath = Path.Combine(Path.GetTempPath(), tempName);
             var path = await youTubeService.DownloadAudioAsync(url, tempPath);
             if (!string.IsNullOrEmpty(path)) {
+                var id = dbService.AddTrack(new TrackInfo {
+                    Title = video.Title,
+                    Path = path,
+                    IsYouTube = true,
+                    CreatedAt = DateTime.Now
+                });
                 playlistPaths.Add(path);
+                playlistIds.Add(id);
                 currentTrackIndex = playlistPaths.Count - 1;
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistBox.SelectedIndex = currentTrackIndex;
