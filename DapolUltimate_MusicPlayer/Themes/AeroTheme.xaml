@@ -414,7 +414,8 @@
                                CornerRadius="6"
                                Background="{TemplateBinding Background}"
                                BorderBrush="{TemplateBinding BorderBrush}"
-                               BorderThickness="{TemplateBinding BorderThickness}">
+                               BorderThickness="{TemplateBinding BorderThickness}"
+                               IsHitTestVisible="False">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="1" Opacity="0.3" Color="#FF0067C0"/>
                             </Border.Effect>
@@ -429,12 +430,13 @@
                                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                                 Margin="{TemplateBinding Padding}"
                                                 VerticalAlignment="Center"/>
-                                <Path x:Name="Arrow" Grid.Column="1" 
-                                     Data="M0,0 L4,4 L8,0" 
-                                     Fill="White" 
-                                     HorizontalAlignment="Center" 
+                                <Path x:Name="Arrow" Grid.Column="1"
+                                     Data="M0,0 L4,4 L8,0"
+                                     Fill="White"
+                                     HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
-                                     Margin="0,0,10,0"/>
+                                     Margin="0,0,10,0"
+                                     IsHitTestVisible="False"/>
                             </Grid>
                         </Border>
                         <Popup x:Name="PART_Popup" 
