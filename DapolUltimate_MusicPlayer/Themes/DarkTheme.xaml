@@ -386,8 +386,15 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
-                        <Border x:Name="MainBorder" 
-                               CornerRadius="6" 
+                        <ToggleButton x:Name="ToggleButton"
+                                     Grid.ColumnSpan="2"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Focusable="False"
+                                     IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                     ClickMode="Press"/>
+                        <Border x:Name="MainBorder"
+                               CornerRadius="6"
                                Background="{TemplateBinding Background}"
                                BorderBrush="{TemplateBinding BorderBrush}"
                                BorderThickness="{TemplateBinding BorderThickness}">
