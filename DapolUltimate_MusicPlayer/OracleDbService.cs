@@ -129,7 +129,8 @@ END;";
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :name) RETURNING ID INTO :id";
-                    cmd.Parameters.Add(new OracleParameter("name", name));
+                    var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = name };
+                    cmd.Parameters.Add(nameParam);
                     var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
                     cmd.Parameters.Add(idParam);
                     cmd.ExecuteNonQuery();
@@ -178,8 +179,10 @@ END;";
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = @"INSERT INTO TRACKS (ID, TITLE, PATH, IS_YOUTUBE, CREATED_AT) VALUES (TRACKS_SEQ.NEXTVAL, :title, :path, :isYT, :created) RETURNING ID INTO :id";
-                    cmd.Parameters.Add(new OracleParameter("title", track.Title));
-                    cmd.Parameters.Add(new OracleParameter("path", track.Path));
+                    var titleParam = new OracleParameter("title", OracleDbType.NVarchar2) { Value = track.Title };
+                    cmd.Parameters.Add(titleParam);
+                    var pathParam = new OracleParameter("path", OracleDbType.NVarchar2) { Value = track.Path };
+                    cmd.Parameters.Add(pathParam);
                     cmd.Parameters.Add(new OracleParameter("isYT", track.IsYouTube ? 1 : 0));
                     cmd.Parameters.Add(new OracleParameter("created", track.CreatedAt));
                     var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
