@@ -30,6 +30,8 @@
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
+    <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource MainButtonStyle}"/>
+
     <!-- Compact button for list items -->
     <Style x:Key="SmallButtonStyle" TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
         <Setter Property="Padding" Value="8,4"/>
@@ -261,6 +263,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource FlatComboBoxStyle}"/>
 
     <Style x:Key="TabControlStyle" TargetType="TabControl">
         <Setter Property="Background" Value="Transparent"/>

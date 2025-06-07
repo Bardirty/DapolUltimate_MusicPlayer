@@ -62,6 +62,7 @@ namespace DapolUltimate_MusicPlayer {
                             IsYouTube = true,
                             CreatedAt = DateTime.Now
                         });
+                        dbService.AddTrackToPlaylist(currentPlaylistId, id);
                         playlistPaths.Add(path);
                         playlistIds.Add(id);
                         currentTrackIndex = playlistPaths.Count - 1;
@@ -95,6 +96,7 @@ namespace DapolUltimate_MusicPlayer {
                     IsYouTube = true,
                     CreatedAt = DateTime.Now
                 });
+                dbService.AddTrackToPlaylist(currentPlaylistId, id);
                 playlistPaths.Add(path);
                 playlistIds.Add(id);
                 currentTrackIndex = playlistPaths.Count - 1;

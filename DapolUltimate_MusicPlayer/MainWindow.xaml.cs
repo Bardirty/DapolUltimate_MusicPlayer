@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Microsoft.VisualBasic;
 
 namespace DapolUltimate_MusicPlayer {
     public enum AppTheme {
@@ -32,10 +33,15 @@ namespace DapolUltimate_MusicPlayer {
         private int currentTrackIndex = -1;
         private readonly OracleDbService dbService = new OracleDbService();
 
+        private List<PlaylistInfo> playlists = new List<PlaylistInfo>();
+        private int currentPlaylistId = -1;
+
         public List<string> PlaylistDisplayNames =>
             playlistPaths.Select(Path.GetFileNameWithoutExtension).ToList();
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public List<string> PlaylistNames => playlists.ConvertAll(p => p.Name);
 
         public MainWindow() {
             InitializeComponent();
@@ -60,10 +66,20 @@ namespace DapolUltimate_MusicPlayer {
 
             try {
                 dbService.EnsureTableExists();
-                var tracks = dbService.LoadTracks();
+
+                playlists = dbService.LoadPlaylists();
+                if (playlists.Count == 0) {
+                    var id = dbService.AddPlaylist("Default");
+                    playlists.Add(new PlaylistInfo { Id = id, Name = "Default" });
+                }
+                OnPropertyChanged(nameof(PlaylistNames));
+
+                currentPlaylistId = playlists[0].Id;
+                var tracks = dbService.LoadPlaylistTracks(currentPlaylistId);
                 playlistPaths = tracks.Select(t => t.Path).ToList();
                 playlistIds = tracks.Select(t => t.Id).ToList();
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
+                PlaylistSelector.SelectedIndex = 0;
             }
             catch (Exception ex) {
                 LogError(ex);

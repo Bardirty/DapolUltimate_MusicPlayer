@@ -59,6 +59,7 @@ namespace DapolUltimate_MusicPlayer {
                         IsYouTube = false,
                         CreatedAt = DateTime.Now
                     });
+                    dbService.AddTrackToPlaylist(currentPlaylistId, id);
                     playlistPaths.Add(file);
                     playlistIds.Add(id);
                 }

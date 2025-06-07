@@ -496,6 +496,8 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource AeroComboBoxStyle}"/>
+
     <!-- Стиль для TextBox -->
     
 

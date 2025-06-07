@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Win32;
 using System.IO;
 using System;
+using Microsoft.VisualBasic;
 
 namespace DapolUltimate_MusicPlayer {
     public partial class MainWindow {
@@ -13,6 +14,25 @@ namespace DapolUltimate_MusicPlayer {
                 currentTrackIndex = PlaylistBox.SelectedIndex;
                 LoadAndPlayFile(playlistPaths[currentTrackIndex]);
             }
+        }
+
+        private void PlaylistSelector_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
+            if (PlaylistSelector.SelectedIndex >= 0 && PlaylistSelector.SelectedIndex < playlists.Count) {
+                currentPlaylistId = playlists[PlaylistSelector.SelectedIndex].Id;
+                var tracks = dbService.LoadPlaylistTracks(currentPlaylistId);
+                playlistPaths = tracks.Select(t => t.Path).ToList();
+                playlistIds = tracks.Select(t => t.Id).ToList();
+                OnPropertyChanged(nameof(PlaylistDisplayNames));
+            }
+        }
+
+        private void AddPlaylist_Click(object sender, RoutedEventArgs e) {
+            var name = Interaction.InputBox("Playlist name", "New Playlist", "");
+            if (string.IsNullOrWhiteSpace(name)) return;
+            var id = dbService.AddPlaylist(name);
+            playlists.Add(new PlaylistInfo { Id = id, Name = name });
+            OnPropertyChanged(nameof(PlaylistNames));
+            PlaylistSelector.SelectedIndex = playlists.Count - 1;
         }
 
         private void AddToPlaylist_Click(object sender, RoutedEventArgs e) {
@@ -30,6 +50,7 @@ namespace DapolUltimate_MusicPlayer {
                         IsYouTube = false,
                         CreatedAt = DateTime.Now
                     });
+                    dbService.AddTrackToPlaylist(currentPlaylistId, id);
                     playlistPaths.Add(path);
                     playlistIds.Add(id);
                 }
@@ -52,7 +73,7 @@ namespace DapolUltimate_MusicPlayer {
                     ResetPlayerState();
                 }
 
-                dbService.DeleteTrack(playlistIds[selectedIndex]);
+                dbService.DeleteTrack(currentPlaylistId, playlistIds[selectedIndex]);
                 playlistPaths.RemoveAt(selectedIndex);
                 playlistIds.RemoveAt(selectedIndex);
                 OnPropertyChanged(nameof(PlaylistDisplayNames));

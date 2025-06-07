@@ -479,6 +479,8 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource XboxComboBoxStyle}"/>
+
     <Style x:Key="TabControlStyle" TargetType="TabControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>

@@ -18,7 +18,7 @@ namespace DapolUltimate_MusicPlayer {
                 conn.Open();
 
                 using (var cmd = conn.CreateCommand()) {
-                    // Создание таблицы TRACKS
+                    //   TRACKS
                     cmd.CommandText = @"
 BEGIN
     EXECUTE IMMEDIATE '
@@ -37,7 +37,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
-                    // Создание SEQUENCE TRACKS_SEQ
+                    //  SEQUENCE TRACKS_SEQ
                     cmd.CommandText = @"
 BEGIN
     EXECUTE IMMEDIATE '
@@ -52,16 +52,99 @@ EXCEPTION
 END;";
                     cmd.ExecuteNonQuery();
                 }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   PLAYLISTS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE PLAYLISTS (
+            ID NUMBER PRIMARY KEY,
+            NAME VARCHAR2(200)
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE PLAYLISTS_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE PLAYLISTS_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   PLAYLIST_TRACKS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE PLAYLIST_TRACKS (
+            PLAYLIST_ID NUMBER,
+            TRACK_ID NUMBER,
+            PRIMARY KEY (PLAYLIST_ID, TRACK_ID)
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
+        public List<PlaylistInfo> LoadPlaylists() {
+            var list = new List<PlaylistInfo>();
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS ORDER BY ID";
+                    using (var reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            list.Add(new PlaylistInfo {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1)
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        }
 
-        public List<TrackInfo> LoadTracks() {
+        public int AddPlaylist(string name) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :name) RETURNING ID INTO :id";
+                    cmd.Parameters.Add(new OracleParameter("name", name));
+                    var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
+                    cmd.Parameters.Add(idParam);
+                    cmd.ExecuteNonQuery();
+                    return Convert.ToInt32(idParam.Value.ToString());
+                }
+            }
+        }
+
+        public List<TrackInfo> LoadPlaylistTracks(int playlistId) {
             var list = new List<TrackInfo>();
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = "SELECT ID, TITLE, PATH, IS_YOUTUBE, CREATED_AT FROM TRACKS ORDER BY ID";
+                    cmd.CommandText = @"SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT FROM TRACKS t JOIN PLAYLIST_TRACKS p ON t.ID = p.TRACK_ID WHERE p.PLAYLIST_ID = :pid ORDER BY t.ID";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
                             list.Add(new TrackInfo {
@@ -78,13 +161,23 @@ END;";
             return list;
         }
 
+        public void AddTrackToPlaylist(int playlistId, int trackId) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "INSERT INTO PLAYLIST_TRACKS (PLAYLIST_ID, TRACK_ID) VALUES (:pid, :tid)";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.Parameters.Add(new OracleParameter("tid", trackId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public int AddTrack(TrackInfo track) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = @"INSERT INTO TRACKS (ID, TITLE, PATH, IS_YOUTUBE, CREATED_AT)
-VALUES (TRACKS_SEQ.NEXTVAL, :title, :path, :isYT, :created) RETURNING ID INTO :id";
-
+                    cmd.CommandText = @"INSERT INTO TRACKS (ID, TITLE, PATH, IS_YOUTUBE, CREATED_AT) VALUES (TRACKS_SEQ.NEXTVAL, :title, :path, :isYT, :created) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("title", track.Title));
                     cmd.Parameters.Add(new OracleParameter("path", track.Path));
                     cmd.Parameters.Add(new OracleParameter("isYT", track.IsYouTube ? 1 : 0));
@@ -97,15 +190,22 @@ VALUES (TRACKS_SEQ.NEXTVAL, :title, :path, :isYT, :created) RETURNING ID INTO :i
             }
         }
 
-        public void DeleteTrack(int id) {
+        public void DeleteTrack(int playlistId, int trackId) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "DELETE FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid AND TRACK_ID = :tid";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.Parameters.Add(new OracleParameter("tid", trackId));
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = "DELETE FROM TRACKS WHERE ID = :id";
-                    cmd.Parameters.Add(new OracleParameter("id", id));
+                    cmd.Parameters.Add(new OracleParameter("id", trackId));
                     cmd.ExecuteNonQuery();
                 }
             }
         }
     }
 }
+
