@@ -41,10 +41,22 @@ namespace DapolUltimate_MusicPlayer {
                 var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
 
                 var audioStreams = manifest.GetAudioOnlyStreams();
+
+                // Prefer MP4 audio streams as they are widely supported by
+                // MediaFoundation/NAudio. If none are present fall back to any
+                // available stream with the highest bitrate.
                 var streamInfo = audioStreams
                     .Where(s => s.Container == Container.Mp4)
-                    .GetWithHighestBitrate() ??
-                    audioStreams.GetWithHighestBitrate();
+                    .OrderByDescending(s => s.Bitrate)
+                    .FirstOrDefault();
+
+                if (streamInfo == null)
+                    streamInfo = audioStreams
+                        .OrderByDescending(s => s.Bitrate)
+                        .FirstOrDefault();
+
+                if (streamInfo == null)
+                    return null; // no audio streams available
 
                 var extension = streamInfo.Container.Name;
                 if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
