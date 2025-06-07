@@ -105,5 +105,50 @@ namespace DapolUltimate_MusicPlayer {
                                MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void DeletePlaylist_Click(object sender, RoutedEventArgs e) {
+            if (PlaylistSelector.SelectedIndex < 0 || PlaylistSelector.SelectedIndex >= playlists.Count) {
+                return;
+            }
+
+            var result = MessageBox.Show("Delete this playlist?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) return;
+
+            int index = PlaylistSelector.SelectedIndex;
+            int id = playlists[index].Id;
+
+            try {
+                if (id == currentPlaylistId) {
+                    StopPlayback();
+                    ResetPlayerState();
+                }
+
+                dbService.DeletePlaylist(id);
+                playlists.RemoveAt(index);
+                OnPropertyChanged(nameof(PlaylistNames));
+
+                if (playlists.Count > 0) {
+                    int newIndex = index >= playlists.Count ? playlists.Count - 1 : index;
+                    currentPlaylistId = playlists[newIndex].Id;
+                    var tracks = dbService.LoadPlaylistTracks(currentPlaylistId);
+                    playlistPaths = tracks.Select(t => t.Path).ToList();
+                    playlistIds = tracks.Select(t => t.Id).ToList();
+                    OnPropertyChanged(nameof(PlaylistDisplayNames));
+                    PlaylistSelector.SelectedIndex = newIndex;
+                }
+                else {
+                    currentPlaylistId = -1;
+                    playlistPaths.Clear();
+                    playlistIds.Clear();
+                    OnPropertyChanged(nameof(PlaylistDisplayNames));
+                    PlaylistSelector.SelectedIndex = -1;
+                }
+
+                StatusText.Text = "Playlist deleted";
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"Error deleting playlist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

@@ -206,6 +206,28 @@ END;";
                 }
             }
         }
+
+        public void DeletePlaylist(int playlistId) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText =
+                        "DELETE FROM TRACKS WHERE ID IN (SELECT TRACK_ID FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid)";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "DELETE FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "DELETE FROM PLAYLISTS WHERE ID = :pid";
+                    cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
 
