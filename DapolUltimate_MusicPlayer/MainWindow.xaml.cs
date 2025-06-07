@@ -55,10 +55,13 @@ namespace DapolUltimate_MusicPlayer {
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.SelectedTheme)) {
                 ApplyTheme(Properties.Settings.Default.SelectedTheme);
-            }
-            else {
+            } else {
                 ApplyTheme("Aero");
             }
+
+            var lang = Properties.Settings.Default.SelectedLanguage;
+            if (string.IsNullOrEmpty(lang)) lang = "en-US";
+            LocalizationManager.ApplyLanguage(lang);
 
             InitializeTimer();
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
@@ -80,6 +83,7 @@ namespace DapolUltimate_MusicPlayer {
                 playlistIds = tracks.Select(t => t.Id).ToList();
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistSelector.SelectedIndex = 0;
+                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : 0;
             }
             catch (Exception ex) {
                 LogError(ex);

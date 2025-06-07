@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="WindowTitle">Дапол Ультимейт Плеер</sys:String>
+    <sys:String x:Key="MainTitle">Дапол Ультимейт Плеер</sys:String>
+    <sys:String x:Key="Subtitle">ПРЕМИУМ МУЗЫКАЛЬНЫЙ ОПЫТ</sys:String>
+    <sys:String x:Key="StatusReady">Готово</sys:String>
+    <sys:String x:Key="TracksLabel">Треки: {0}</sys:String>
+    <sys:String x:Key="NoTrack">Трек не загружен</sys:String>
+    <sys:String x:Key="UnknownArtist">Неизвестный исполнитель</sys:String>
+    <sys:String x:Key="PlaylistHeader">Плейлист</sys:String>
+    <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="SearchButton">Поиск</sys:String>
+    <sys:String x:Key="AeroTheme">Тема Aero</sys:String>
+    <sys:String x:Key="FlatTheme">Плоская тема</sys:String>
+    <sys:String x:Key="DarkTheme">Тёмная тема</sys:String>
+    <sys:String x:Key="LanguageEnglish">English</sys:String>
+    <sys:String x:Key="LanguageRussian">Русский</sys:String>
+</ResourceDictionary>
