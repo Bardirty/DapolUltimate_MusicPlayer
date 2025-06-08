@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="WindowTitle">Dapol Ultimate Player</sys:String>
+    <sys:String x:Key="MainTitle">DAPOL ULTIMATE PLAYER</sys:String>
+    <sys:String x:Key="Subtitle">PREMIUMOWE DOŚWIADCZENIE MUZYCZNE</sys:String>
+    <sys:String x:Key="StatusReady">Gotowe</sys:String>
+    <sys:String x:Key="TracksLabel">Utwory: {0}</sys:String>
+    <sys:String x:Key="NoTrack">Brak wczytanego utworu</sys:String>
+    <sys:String x:Key="UnknownArtist">Nieznany wykonawca</sys:String>
+    <sys:String x:Key="PlaylistHeader">Lista odtwarzania</sys:String>
+    <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="DownloadHistoryHeader">Historia</sys:String>
+    <sys:String x:Key="SearchButton">Szukaj</sys:String>
+    <sys:String x:Key="AeroTheme">Motyw Aero</sys:String>
+    <sys:String x:Key="FlatTheme">Motyw Płaski</sys:String>
+    <sys:String x:Key="DarkTheme">Ciemny motyw</sys:String>
+    <sys:String x:Key="LanguageEnglish">English</sys:String>
+    <sys:String x:Key="LanguageRussian">Русский</sys:String>
+    <sys:String x:Key="LanguagePolish">Polski</sys:String>
+</ResourceDictionary>

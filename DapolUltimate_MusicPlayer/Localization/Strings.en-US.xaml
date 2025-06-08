@@ -10,10 +10,12 @@
     <sys:String x:Key="UnknownArtist">Unknown Artist</sys:String>
     <sys:String x:Key="PlaylistHeader">Playlist</sys:String>
     <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="DownloadHistoryHeader">History</sys:String>
     <sys:String x:Key="SearchButton">Search</sys:String>
     <sys:String x:Key="AeroTheme">Aero Theme</sys:String>
     <sys:String x:Key="FlatTheme">Flat Theme</sys:String>
     <sys:String x:Key="DarkTheme">Dark Theme</sys:String>
     <sys:String x:Key="LanguageEnglish">English</sys:String>
     <sys:String x:Key="LanguageRussian">Русский</sys:String>
+    <sys:String x:Key="LanguagePolish">Polski</sys:String>
 </ResourceDictionary>

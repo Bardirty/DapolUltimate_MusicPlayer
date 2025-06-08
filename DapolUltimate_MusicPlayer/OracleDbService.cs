@@ -102,6 +102,41 @@ EXCEPTION
 END;";
                     cmd.ExecuteNonQuery();
                 }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   DOWNLOAD_HISTORY
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE DOWNLOAD_HISTORY (
+            ID NUMBER PRIMARY KEY,
+            TRACK_ID NUMBER,
+            SOURCE NVARCHAR2(50),
+            DOWNLOADED_AT TIMESTAMP
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE DOWNLOAD_HISTORY_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE DOWNLOAD_HISTORY_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -242,6 +277,40 @@ END;";
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void AddDownloadRecord(int trackId, string source, DateTime date) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"INSERT INTO DOWNLOAD_HISTORY (ID, TRACK_ID, SOURCE, DOWNLOADED_AT) VALUES (DOWNLOAD_HISTORY_SEQ.NEXTVAL, :tid, :src, :dt)";
+                    cmd.Parameters.Add(new OracleParameter("tid", trackId));
+                    cmd.Parameters.Add(new OracleParameter("src", source));
+                    cmd.Parameters.Add(new OracleParameter("dt", date));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<DownloadHistoryEntry> GetDownloadHistory() {
+            var list = new List<DownloadHistoryEntry>();
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "SELECT ID, TRACK_ID, SOURCE, DOWNLOADED_AT FROM DOWNLOAD_HISTORY ORDER BY ID";
+                    using (var reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            list.Add(new DownloadHistoryEntry {
+                                Id = reader.GetInt32(0),
+                                TrackId = reader.GetInt32(1),
+                                Source = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                DownloadedAt = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
         }
     }
 }
