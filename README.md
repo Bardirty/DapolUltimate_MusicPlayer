@@ -1,6 +1,7 @@
 # DapolUltimate_MusicPlayer
 
 This WPF music player provides simple playback features and customizable themes.
+It now targets **.NET Framework 4.8**, so make sure you have the latest runtime installed.
 
 ## Features
 - Local audio file playback using NAudio
