@@ -16,35 +16,23 @@ namespace DapolUltimate_MusicPlayer {
         }
 
         public async Task<List<Video>> SearchVideosAsync(string query, int limit = 20) {
-            var results = new List<Video>();
-            var asyncEnum = _client.Search.GetVideosAsync(query).GetAsyncEnumerator();
-
             try {
-                while (await asyncEnum.MoveNextAsync()) {
-                    var searchResult = asyncEnum.Current;
-                    var fullVideo = await _client.Videos.GetAsync(searchResult.Id);
-                    results.Add(fullVideo);
-                    if (results.Count >= limit)
-                        break;
-                }
+                return await _client.Search.GetVideosAsync(query).CollectAsync(limit);
             }
-            finally {
-                await asyncEnum.DisposeAsync();
+            catch (Exception ex) {
+                Console.WriteLine($"Error searching YouTube: {ex.Message}");
+                return new List<Video>();
             }
-
-            return results;
         }
 
         public async Task<string> DownloadAudioAsync(string videoUrl, string savePath) {
             try {
-                var videoId = VideoId.Parse(videoUrl);
-                var manifest = await _client.Videos.Streams.GetManifestAsync(videoId);
-
-                var audioStreams = manifest.GetAudioOnlyStreams();
-                var streamInfo = audioStreams
-                    .Where(s => s.Container == Container.Mp4)
-                    .GetWithHighestBitrate() ??
-                    audioStreams.GetWithHighestBitrate();
+                var manifest = await _client.Videos.Streams.GetManifestAsync(VideoId.Parse(videoUrl));
+                var streamInfo = manifest.GetAudioOnlyStreams()
+                                         .OrderByDescending(s => s.Bitrate)
+                                         .FirstOrDefault();
+                if (streamInfo == null)
+                    return null;
 
                 var extension = streamInfo.Container.Name;
                 if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
@@ -52,11 +40,10 @@ namespace DapolUltimate_MusicPlayer {
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
                 await _client.Videos.Streams.DownloadAsync(streamInfo, savePath);
-
                 return savePath;
             }
             catch (Exception ex) {
-                Console.WriteLine($"Error downloading video: {ex.Message}");
+                Console.WriteLine($"Error downloading from YouTube: {ex.Message}");
                 return null;
             }
         }

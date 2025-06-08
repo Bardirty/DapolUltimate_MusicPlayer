@@ -139,6 +139,18 @@ END;";
             }
         }
 
+        public void RenamePlaylist(int playlistId, string newName) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "UPDATE PLAYLISTS SET NAME = :name WHERE ID = :id";
+                    cmd.Parameters.Add(new OracleParameter("name", newName));
+                    cmd.Parameters.Add(new OracleParameter("id", playlistId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<TrackInfo> LoadPlaylistTracks(int playlistId) {
             var list = new List<TrackInfo>();
             using (var conn = GetConnection()) {

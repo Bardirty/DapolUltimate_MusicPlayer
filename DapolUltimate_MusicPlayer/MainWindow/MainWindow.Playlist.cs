@@ -35,6 +35,20 @@ namespace DapolUltimate_MusicPlayer {
             PlaylistSelector.SelectedIndex = playlists.Count - 1;
         }
 
+        private void RenamePlaylist_Click(object sender, RoutedEventArgs e) {
+            if (PlaylistSelector.SelectedIndex < 0 || PlaylistSelector.SelectedIndex >= playlists.Count)
+                return;
+
+            var current = playlists[PlaylistSelector.SelectedIndex];
+            var name = Interaction.InputBox("Playlist name", "Rename Playlist", current.Name);
+            if (string.IsNullOrWhiteSpace(name) || name == current.Name) return;
+
+            dbService.RenamePlaylist(current.Id, name);
+            current.Name = name;
+            OnPropertyChanged(nameof(PlaylistNames));
+            StatusText.Text = "Playlist renamed";
+        }
+
         private void AddToPlaylist_Click(object sender, RoutedEventArgs e) {
             var dialog = new OpenFileDialog {
                 Filter = "Audio files (*.mp3;*.wav;*.aac;*.wma;*.flac)|*.mp3;*.wav;*.aac;*.wma;*.flac|All files (*.*)|*.*",
