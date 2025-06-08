@@ -150,5 +150,25 @@ namespace DapolUltimate_MusicPlayer {
                 MessageBox.Show($"Error deleting playlist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void RenamePlaylist_Click(object sender, RoutedEventArgs e) {
+            if (PlaylistSelector.SelectedIndex < 0 || PlaylistSelector.SelectedIndex >= playlists.Count)
+                return;
+
+            var playlist = playlists[PlaylistSelector.SelectedIndex];
+            var name = Interaction.InputBox("Playlist name", "Rename Playlist", playlist.Name);
+            if (string.IsNullOrWhiteSpace(name) || name == playlist.Name)
+                return;
+
+            try {
+                dbService.UpdatePlaylistName(playlist.Id, name);
+                playlist.Name = name;
+                OnPropertyChanged(nameof(PlaylistNames));
+                StatusText.Text = "Playlist renamed";
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"Error renaming playlist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

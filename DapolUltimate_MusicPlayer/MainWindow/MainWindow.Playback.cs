@@ -252,7 +252,7 @@ namespace DapolUltimate_MusicPlayer {
 
                 if (!File.Exists(filePath)) {
                     StatusText.Text = "File not found";
-                    PlayNextTrack();
+                    HandleFailedTrack();
                     return;
                 }
 
@@ -282,7 +282,7 @@ namespace DapolUltimate_MusicPlayer {
             catch (Exception ex) {
                 MessageBox.Show($"Error loading file: {ex.Message}", "Error",
                                MessageBoxButton.OK, MessageBoxImage.Error);
-                PlayNextTrack();
+                HandleFailedTrack();
             }
         }
 
@@ -303,6 +303,29 @@ namespace DapolUltimate_MusicPlayer {
             catch (Exception ex) {
                 Console.WriteLine($"Error resetting player state: {ex.Message}");
             }
+        }
+
+        private void HandleFailedTrack() {
+            if (currentTrackIndex < 0 || currentTrackIndex >= playlistPaths.Count)
+                return;
+
+            try {
+                dbService.DeleteTrack(currentPlaylistId, playlistIds[currentTrackIndex]);
+            } catch {
+                // ignore db errors when cleaning up
+            }
+            playlistPaths.RemoveAt(currentTrackIndex);
+            playlistIds.RemoveAt(currentTrackIndex);
+            OnPropertyChanged(nameof(PlaylistDisplayNames));
+
+            if (playlistPaths.Count == 0) {
+                ResetPlayerState();
+                StatusText.Text = "Playback failed";
+                return;
+            }
+
+            currentTrackIndex--;
+            PlayNextTrack();
         }
     }
 }

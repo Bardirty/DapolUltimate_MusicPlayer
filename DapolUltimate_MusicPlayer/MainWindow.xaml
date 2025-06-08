@@ -243,6 +243,9 @@
                                             <Button Content="-" Width="25" Height="25" Margin="5,0,0,0"
                                                     Style="{DynamicResource RoundButtonStyle}"
                                                     Click="DeletePlaylist_Click"/>
+                                            <Button Content="✎" Width="25" Height="25" Margin="5,0,0,0"
+                                                    Style="{DynamicResource RoundButtonStyle}"
+                                                    Click="RenamePlaylist_Click"/>
                                         </StackPanel>
 
                                         <ListBox x:Name="PlaylistBox" 
