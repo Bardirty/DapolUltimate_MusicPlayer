@@ -227,13 +227,13 @@
                                             <TextBlock Text="PLAYLIST"
                                                        FontSize="16"
                                                        FontWeight="Bold"
-                                                       Foreground="White">
+                                                       Foreground="White" Height="23">
                                                 <TextBlock.Effect>
                                                     <DropShadowEffect BlurRadius="1" ShadowDepth="1" Opacity="0.2" Color="#FF0078D7"/>
                                                 </TextBlock.Effect>
                                             </TextBlock>
                                             <ComboBox x:Name="PlaylistSelector"
-                                                      Width="120" Margin="10,0,0,0"
+                                                      Width="102" Margin="10,0,0,0"
                                                       ItemsSource="{Binding PlaylistNames}"
                                                       Style="{DynamicResource ComboBoxStyle}"
                                                       SelectionChanged="PlaylistSelector_SelectionChanged"/>

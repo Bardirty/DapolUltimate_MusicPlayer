@@ -16,29 +16,55 @@ namespace DapolUltimate_MusicPlayer {
         }
 
         public async Task<List<Video>> SearchVideosAsync(string query, int limit = 20) {
+            var results = new List<Video>();
             try {
-                return await _client.Search.GetVideosAsync(query).CollectAsync(limit);
+                await foreach (var result in _client.Search.GetVideosAsync(query)) {
+                    var video = await _client.Videos.GetAsync(result.Id);
+                    results.Add(video);
+
+                    if (results.Count >= limit)
+                        break;
+                }
             }
             catch (Exception ex) {
                 Console.WriteLine($"Error searching YouTube: {ex.Message}");
-                return new List<Video>();
             }
+            return results;
         }
+
+
 
         public async Task<string> DownloadAudioAsync(string videoUrl, string savePath) {
             try {
-                var manifest = await _client.Videos.Streams.GetManifestAsync(VideoId.Parse(videoUrl));
-                var streamInfo = manifest.GetAudioOnlyStreams()
-                                         .OrderByDescending(s => s.Bitrate)
-                                         .FirstOrDefault();
-                if (streamInfo == null)
+                // Безопасно парсим VideoId из URL
+                var videoId = VideoId.TryParse(videoUrl);
+                if (videoId == null) {
+                    Console.WriteLine("Invalid YouTube URL.");
                     return null;
+                }
+
+                var manifest = await _client.Videos.Streams.GetManifestAsync(videoId.Value);
+                var streamInfo = manifest
+                    .GetAudioOnlyStreams()
+                    .Where(s => s.Container == Container.WebM || s.Container == Container.Mp4)
+                    .OrderByDescending(s => s.Bitrate)
+                    .FirstOrDefault();
+
+
+
+                if (streamInfo == null) {
+                    Console.WriteLine("No audio streams found.");
+                    return null;
+                }
 
                 var extension = streamInfo.Container.Name;
                 if (!savePath.EndsWith($".{extension}", StringComparison.OrdinalIgnoreCase))
                     savePath = Path.ChangeExtension(savePath, extension);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+                var dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                    Directory.CreateDirectory(dir);
+
                 await _client.Videos.Streams.DownloadAsync(streamInfo, savePath);
                 return savePath;
             }
@@ -47,5 +73,6 @@ namespace DapolUltimate_MusicPlayer {
                 return null;
             }
         }
+
     }
 }
