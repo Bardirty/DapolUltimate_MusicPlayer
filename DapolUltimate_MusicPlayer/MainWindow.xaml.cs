@@ -36,6 +36,14 @@ namespace DapolUltimate_MusicPlayer {
         private List<PlaylistInfo> playlists = new List<PlaylistInfo>();
         private int currentPlaylistId = -1;
 
+        private List<DownloadHistoryEntry> downloadHistory = new List<DownloadHistoryEntry>();
+
+        public List<DownloadHistoryEntry> DownloadHistory
+        {
+            get => downloadHistory;
+            set { downloadHistory = value; OnPropertyChanged(nameof(DownloadHistory)); }
+        }
+
         public List<string> PlaylistDisplayNames =>
             playlistPaths.Select(Path.GetFileNameWithoutExtension).ToList();
 
@@ -83,7 +91,10 @@ namespace DapolUltimate_MusicPlayer {
                 playlistIds = tracks.Select(t => t.Id).ToList();
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistSelector.SelectedIndex = 0;
-                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : 0;
+                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 :
+                    (lang == "pl-PL" ? 2 : 0);
+
+                DownloadHistory = dbService.GetDownloadHistory();
             }
             catch (Exception ex) {
                 LogError(ex);

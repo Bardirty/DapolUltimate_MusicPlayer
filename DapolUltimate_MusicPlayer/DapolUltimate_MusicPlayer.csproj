@@ -159,6 +159,7 @@
     <Compile Include="OracleDbService.cs" />
     <Compile Include="PlaylistInfo.cs" />
     <Compile Include="TrackInfo.cs" />
+    <Compile Include="DownloadHistoryEntry.cs" />
     <Page Include="BaseStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -211,6 +212,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Localization\Strings.ru-RU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Localization\Strings.pl-PL.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

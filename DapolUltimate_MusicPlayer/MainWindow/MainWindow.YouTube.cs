@@ -62,6 +62,14 @@ namespace DapolUltimate_MusicPlayer {
                             IsYouTube = true,
                             CreatedAt = DateTime.Now
                         });
+                        dbService.AddDownloadRecord(id, "YouTube", DateTime.Now);
+                        DownloadHistory.Add(new DownloadHistoryEntry {
+                            Id = 0,
+                            TrackId = id,
+                            Source = "YouTube",
+                            DownloadedAt = DateTime.Now
+                        });
+                        OnPropertyChanged(nameof(DownloadHistory));
                         dbService.AddTrackToPlaylist(currentPlaylistId, id);
                         playlistPaths.Add(path);
                         playlistIds.Add(id);
@@ -96,6 +104,14 @@ namespace DapolUltimate_MusicPlayer {
                     IsYouTube = true,
                     CreatedAt = DateTime.Now
                 });
+                dbService.AddDownloadRecord(id, "YouTube", DateTime.Now);
+                DownloadHistory.Add(new DownloadHistoryEntry {
+                    Id = 0,
+                    TrackId = id,
+                    Source = "YouTube",
+                    DownloadedAt = DateTime.Now
+                });
+                OnPropertyChanged(nameof(DownloadHistory));
                 dbService.AddTrackToPlaylist(currentPlaylistId, id);
                 playlistPaths.Add(path);
                 playlistIds.Add(id);

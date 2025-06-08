@@ -322,6 +322,18 @@
                                     </ListBox>
                                 </StackPanel>
                             </TabItem>
+                            <TabItem Header="{DynamicResource DownloadHistoryHeader}" Style="{DynamicResource TabItemStyle}">
+                                <ListBox ItemsSource="{Binding DownloadHistory}" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Source}" Width="80"/>
+                                                <TextBlock Text="{Binding DownloadedAt, StringFormat='{}{0:G}'}" Margin="10,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </TabItem>
                         </TabControl>
                     </Grid>
 
@@ -334,6 +346,7 @@
                                   Style="{DynamicResource ComboBoxStyle}">
                             <ComboBoxItem Content="{DynamicResource LanguageEnglish}"/>
                             <ComboBoxItem Content="{DynamicResource LanguageRussian}"/>
+                            <ComboBoxItem Content="{DynamicResource LanguagePolish}"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>
