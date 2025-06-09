@@ -29,7 +29,11 @@ namespace DapolUltimate_MusicPlayer {
         private void AddPlaylist_Click(object sender, RoutedEventArgs e) {
             var name = Interaction.InputBox("Playlist name", "New Playlist", "");
             if (string.IsNullOrWhiteSpace(name)) return;
-            var id = dbService.AddPlaylist(name);
+            if (dbService.PlaylistExists(userId, name)) {
+                MessageBox.Show((string)FindResource("PlaylistExists"));
+                return;
+            }
+            var id = dbService.AddPlaylist(name, userId);
             playlists.Add(new PlaylistInfo { Id = id, Name = name });
             OnPropertyChanged(nameof(PlaylistNames));
             PlaylistSelector.SelectedIndex = playlists.Count - 1;
@@ -137,7 +141,7 @@ namespace DapolUltimate_MusicPlayer {
                     ResetPlayerState();
                 }
 
-                dbService.DeletePlaylist(id);
+                dbService.DeletePlaylist(id, userId);
                 playlists.RemoveAt(index);
                 OnPropertyChanged(nameof(PlaylistNames));
 

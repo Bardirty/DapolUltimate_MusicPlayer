@@ -78,9 +78,9 @@ namespace DapolUltimate_MusicPlayer {
                     return;
                 }
 
-                playlists = dbService.LoadPlaylists();
+                playlists = dbService.LoadPlaylists(userId);
                 if (playlists.Count == 0) {
-                    var id = dbService.AddPlaylist("Default");
+                    var id = dbService.AddPlaylist("Default", userId);
                     playlists.Add(new PlaylistInfo { Id = id, Name = "Default" });
                 }
                 OnPropertyChanged(nameof(PlaylistNames));
@@ -91,7 +91,11 @@ namespace DapolUltimate_MusicPlayer {
                 playlistIds = tracks.Select(t => t.Id).ToList();
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistSelector.SelectedIndex = 0;
-                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : 0;
+                LanguageSelector.SelectedIndex = lang switch {
+                    "ru-RU" => 1,
+                    "pl-PL" => 2,
+                    _ => 0
+                };
                 LoadFavorites();
                 LoadStats();
             }

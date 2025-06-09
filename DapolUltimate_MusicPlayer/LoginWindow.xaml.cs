@@ -19,19 +19,21 @@ namespace DapolUltimate_MusicPlayer {
                 UserId = user.Id;
                 DialogResult = true;
             } else {
-                MessageBox.Show("Invalid credentials");
+                MessageBox.Show((string)FindResource("InvalidCredentials"));
             }
         }
 
         private void Register_Click(object sender, RoutedEventArgs e) {
             if (string.IsNullOrWhiteSpace(UsernameBox.Text) || string.IsNullOrWhiteSpace(PasswordBox.Password)) {
-                MessageBox.Show("Enter username and password");
+                MessageBox.Show((string)FindResource("EnterCredentials"));
                 return;
             }
             var hash = ComputeHash(PasswordBox.Password);
             try {
                 UserId = dbService.RegisterUser(UsernameBox.Text.Trim(), hash);
                 DialogResult = true;
+            } catch (InvalidOperationException ex) when (ex.Message == "USER_EXISTS") {
+                MessageBox.Show((string)FindResource("UserExists"));
             } catch (Exception ex) {
                 MessageBox.Show($"Registration error: {ex.Message}");
             }

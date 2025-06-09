@@ -60,7 +60,9 @@ BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE PLAYLISTS (
             ID NUMBER PRIMARY KEY,
-            NAME NVARCHAR2(200)
+            USER_ID NUMBER,
+            NAME NVARCHAR2(200),
+            UNIQUE (USER_ID, NAME)
         )';
 EXCEPTION
     WHEN OTHERS THEN
@@ -211,12 +213,13 @@ END;";
             }
         }
 
-        public List<PlaylistInfo> LoadPlaylists() {
+        public List<PlaylistInfo> LoadPlaylists(int userId) {
             var list = new List<PlaylistInfo>();
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS ORDER BY ID";
+                    cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS WHERE USER_ID = :uid ORDER BY ID";
+                    cmd.Parameters.Add(new OracleParameter("uid", userId));
                     using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
                             list.Add(new PlaylistInfo {
@@ -230,11 +233,12 @@ END;";
             return list;
         }
 
-        public int AddPlaylist(string name) {
+        public int AddPlaylist(string name, int userId) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :name) RETURNING ID INTO :id";
+                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, USER_ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :uid, :name) RETURNING ID INTO :id";
+                    cmd.Parameters.Add(new OracleParameter("uid", userId));
                     var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = name };
                     cmd.Parameters.Add(nameParam);
                     var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
@@ -250,7 +254,7 @@ END;";
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = "UPDATE PLAYLISTS SET NAME = :name WHERE ID = :id";
-                    cmd.Parameters.Add(new OracleParameter("name", newName));
+                    cmd.Parameters.Add(new OracleParameter("name", OracleDbType.NVarchar2) { Value = newName });
                     cmd.Parameters.Add(new OracleParameter("id", playlistId));
                     cmd.ExecuteNonQuery();
                 }
@@ -328,7 +332,7 @@ END;";
             }
         }
 
-        public void DeletePlaylist(int playlistId) {
+        public void DeletePlaylist(int playlistId, int userId) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
@@ -343,8 +347,9 @@ END;";
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = "DELETE FROM PLAYLISTS WHERE ID = :pid";
+                    cmd.CommandText = "DELETE FROM PLAYLISTS WHERE ID = :pid AND USER_ID = :uid";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
+                    cmd.Parameters.Add(new OracleParameter("uid", userId));
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -353,6 +358,8 @@ END;";
         public int RegisterUser(string username, string passwordHash) {
             using (var conn = GetConnection()) {
                 conn.Open();
+                if (GetUserByUsername(username) != null)
+                    throw new InvalidOperationException("USER_EXISTS");
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = @"INSERT INTO USERS (ID, USERNAME, PASSWORD_HASH, CREATED_AT) VALUES (USERS_SEQ.NEXTVAL, :u, :p, :c) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("u", username));
@@ -385,6 +392,19 @@ END;";
                 }
             }
             return null;
+        }
+
+        public bool PlaylistExists(int userId, string name) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "SELECT 1 FROM PLAYLISTS WHERE USER_ID = :uid AND NAME = :n";
+                    cmd.Parameters.Add(new OracleParameter("uid", userId));
+                    cmd.Parameters.Add(new OracleParameter("n", name));
+                    using var reader = cmd.ExecuteReader();
+                    return reader.Read();
+                }
+            }
         }
 
         public void AddFavorite(int userId, int trackId) {
