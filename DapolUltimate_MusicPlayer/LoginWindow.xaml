@@ -6,10 +6,19 @@
         Width="340"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        FontFamily="Segoe UI"
-        FontSize="14"
-        Background="#F0F0F0">
-    <Border Background="White" Padding="20" Margin="20" CornerRadius="6" BorderBrush="#DDDDDD" BorderThickness="1">
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/AeroTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Background="{DynamicResource WindowBackground}"
+            Padding="20" Margin="20" CornerRadius="8"
+            BorderBrush="{StaticResource AeroGlassWhite}" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -21,17 +30,19 @@
 
             <TextBlock Grid.Row="0"
                        Text="{DynamicResource UsernameLabel}"
-                       Margin="0,0,0,5"/>
-            <TextBox Grid.Row="1" x:Name="UsernameBox" Margin="0,0,0,10"/>
+                       Margin="0,0,0,5"
+                       Foreground="{DynamicResource TextColor}"/>
+            <TextBox Grid.Row="1" x:Name="UsernameBox" Style="{DynamicResource TextBoxStyle}" Margin="0,0,0,10"/>
 
             <TextBlock Grid.Row="2"
                        Text="{DynamicResource PasswordLabel}"
-                       Margin="0,0,0,5"/>
+                       Margin="0,0,0,5"
+                       Foreground="{DynamicResource TextColor}"/>
             <PasswordBox Grid.Row="3" x:Name="PasswordBox" Margin="0,0,0,10"/>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="{DynamicResource LoginButton}" Click="Login_Click" Margin="0,0,5,0"/>
-                <Button Content="{DynamicResource RegisterButton}" Click="Register_Click"/>
+                <Button Content="{DynamicResource LoginButton}" Style="{DynamicResource ButtonStyle}" Click="Login_Click" Margin="0,0,5,0"/>
+                <Button Content="{DynamicResource RegisterButton}" Style="{DynamicResource ButtonStyle}" Click="Register_Click"/>
             </StackPanel>
         </Grid>
     </Border>
