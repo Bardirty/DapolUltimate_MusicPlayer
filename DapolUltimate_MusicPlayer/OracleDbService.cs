@@ -18,6 +18,7 @@ namespace DapolUltimate_MusicPlayer {
                 conn.Open();
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   TRACKS
                     cmd.CommandText = @"
 BEGIN
@@ -37,6 +38,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //  SEQUENCE TRACKS_SEQ
                     cmd.CommandText = @"
 BEGIN
@@ -54,6 +56,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   PLAYLISTS
                     cmd.CommandText = @"
 BEGIN
@@ -72,6 +75,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //  SEQUENCE PLAYLISTS_SEQ
                     cmd.CommandText = @"
 BEGIN
@@ -89,6 +93,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   PLAYLIST_TRACKS
                     cmd.CommandText = @"
 BEGIN
@@ -106,6 +111,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   USERS
                     cmd.CommandText = @"
 BEGIN
@@ -124,6 +130,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //  SEQUENCE USERS_SEQ
                     cmd.CommandText = @"
 BEGIN
@@ -141,6 +148,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   FAVORITES
                     cmd.CommandText = @"
 BEGIN
@@ -160,6 +168,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //  SEQUENCE FAVORITES_SEQ
                     cmd.CommandText = @"
 BEGIN
@@ -177,6 +186,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //   PLAYBACK_STATS
                     cmd.CommandText = @"
 BEGIN
@@ -195,6 +205,7 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     //  SEQUENCE PLAYBACK_STATS_SEQ
                     cmd.CommandText = @"
 BEGIN
@@ -218,6 +229,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS WHERE USER_ID = :uid ORDER BY ID";
                     cmd.Parameters.Add(new OracleParameter("uid", userId));
                     using (var reader = cmd.ExecuteReader()) {
@@ -237,6 +249,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, USER_ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :uid, :name) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("uid", userId));
                     var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = name };
@@ -253,6 +266,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "UPDATE PLAYLISTS SET NAME = :name WHERE ID = :id";
                     cmd.Parameters.Add(new OracleParameter("name", OracleDbType.NVarchar2) { Value = newName });
                     cmd.Parameters.Add(new OracleParameter("id", playlistId));
@@ -266,6 +280,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT FROM TRACKS t JOIN PLAYLIST_TRACKS p ON t.ID = p.TRACK_ID WHERE p.PLAYLIST_ID = :pid ORDER BY t.ID";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     using (var reader = cmd.ExecuteReader()) {
@@ -288,6 +303,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "INSERT INTO PLAYLIST_TRACKS (PLAYLIST_ID, TRACK_ID) VALUES (:pid, :tid)";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     cmd.Parameters.Add(new OracleParameter("tid", trackId));
@@ -300,6 +316,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"INSERT INTO TRACKS (ID, TITLE, PATH, IS_YOUTUBE, CREATED_AT) VALUES (TRACKS_SEQ.NEXTVAL, :title, :path, :isYT, :created) RETURNING ID INTO :id";
                     var titleParam = new OracleParameter("title", OracleDbType.NVarchar2) { Value = track.Title };
                     cmd.Parameters.Add(titleParam);
@@ -319,12 +336,14 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "DELETE FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid AND TRACK_ID = :tid";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     cmd.Parameters.Add(new OracleParameter("tid", trackId));
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "DELETE FROM TRACKS WHERE ID = :id";
                     cmd.Parameters.Add(new OracleParameter("id", trackId));
                     cmd.ExecuteNonQuery();
@@ -336,17 +355,20 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText =
                         "DELETE FROM TRACKS WHERE ID IN (SELECT TRACK_ID FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid)";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "DELETE FROM PLAYLIST_TRACKS WHERE PLAYLIST_ID = :pid";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "DELETE FROM PLAYLISTS WHERE ID = :pid AND USER_ID = :uid";
                     cmd.Parameters.Add(new OracleParameter("pid", playlistId));
                     cmd.Parameters.Add(new OracleParameter("uid", userId));
@@ -361,6 +383,7 @@ END;";
                 if (GetUserByUsername(username) != null)
                     throw new InvalidOperationException("USER_EXISTS");
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"INSERT INTO USERS (ID, USERNAME, PASSWORD_HASH, CREATED_AT) VALUES (USERS_SEQ.NEXTVAL, :u, :p, :c) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("u", username));
                     cmd.Parameters.Add(new OracleParameter("p", passwordHash));
@@ -377,6 +400,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "SELECT ID, USERNAME, PASSWORD_HASH, CREATED_AT FROM USERS WHERE USERNAME = :u";
                     cmd.Parameters.Add(new OracleParameter("u", username));
                     using (var reader = cmd.ExecuteReader()) {
@@ -398,6 +422,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "SELECT 1 FROM PLAYLISTS WHERE USER_ID = :uid AND NAME = :n";
                     cmd.Parameters.Add(new OracleParameter("uid", userId));
                     cmd.Parameters.Add(new OracleParameter("n", name));
@@ -411,6 +436,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"INSERT INTO FAVORITES (ID, USER_ID, TRACK_ID, CREATED_AT) VALUES (FAVORITES_SEQ.NEXTVAL, :u, :t, :c)";
                     cmd.Parameters.Add(new OracleParameter("u", userId));
                     cmd.Parameters.Add(new OracleParameter("t", trackId));
@@ -424,6 +450,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = "DELETE FROM FAVORITES WHERE USER_ID = :u AND TRACK_ID = :t";
                     cmd.Parameters.Add(new OracleParameter("u", userId));
                     cmd.Parameters.Add(new OracleParameter("t", trackId));
@@ -437,6 +464,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT FROM TRACKS t JOIN FAVORITES f ON t.ID = f.TRACK_ID WHERE f.USER_ID = :u ORDER BY f.CREATED_AT DESC";
                     cmd.Parameters.Add(new OracleParameter("u", userId));
                     using (var reader = cmd.ExecuteReader()) {
@@ -459,6 +487,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"INSERT INTO PLAYBACK_STATS (ID, USER_ID, TRACK_ID, PLAYED_AT) VALUES (PLAYBACK_STATS_SEQ.NEXTVAL, :u, :t, :c)";
                     cmd.Parameters.Add(new OracleParameter("u", userId));
                     cmd.Parameters.Add(new OracleParameter("t", trackId));
@@ -473,6 +502,7 @@ END;";
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
+                    cmd.BindByName = true;
                     cmd.CommandText = @"SELECT * FROM (
                         SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT, COUNT(*) AS C
                         FROM TRACKS t JOIN PLAYBACK_STATS p ON t.ID = p.TRACK_ID
