@@ -36,7 +36,7 @@ namespace DapolUltimate_MusicPlayer {
         }
 
         private void RemoveFavorite_Click(object sender, RoutedEventArgs e) {
-            if (userId <= 0 || FavoritesBox.SelectedItem is not TrackInfo track)
+            if (userId <= 0 || !(FavoritesBox.SelectedItem is TrackInfo track))
                 return;
             dbService.RemoveFavorite(userId, track.Id);
             LoadFavorites();
