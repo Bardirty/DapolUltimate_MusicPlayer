@@ -194,6 +194,20 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MainWindow\MainWindow.Favorites.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="TrackStatInfo.cs" />
     <Compile Include="LocalizationManager.cs" />
     <Page Include="Themes\AeroTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +225,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Localization\Strings.ru-RU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Localization\Strings.pl-PL.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

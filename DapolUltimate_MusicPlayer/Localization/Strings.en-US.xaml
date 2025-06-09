@@ -10,10 +10,22 @@
     <sys:String x:Key="UnknownArtist">Unknown Artist</sys:String>
     <sys:String x:Key="PlaylistHeader">Playlist</sys:String>
     <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="FavoritesHeader">Favorites</sys:String>
+    <sys:String x:Key="StatsHeader">Top Played</sys:String>
+    <sys:String x:Key="LoginTitle">Login</sys:String>
+    <sys:String x:Key="UsernameLabel">Username</sys:String>
+    <sys:String x:Key="PasswordLabel">Password</sys:String>
+    <sys:String x:Key="LoginButton">Login</sys:String>
+    <sys:String x:Key="RegisterButton">Register</sys:String>
     <sys:String x:Key="SearchButton">Search</sys:String>
     <sys:String x:Key="AeroTheme">Aero Theme</sys:String>
     <sys:String x:Key="FlatTheme">Flat Theme</sys:String>
     <sys:String x:Key="DarkTheme">Dark Theme</sys:String>
     <sys:String x:Key="LanguageEnglish">English</sys:String>
     <sys:String x:Key="LanguageRussian">Русский</sys:String>
+    <sys:String x:Key="LanguagePolish">Polish</sys:String>
+    <sys:String x:Key="UserExists">User already exists</sys:String>
+    <sys:String x:Key="PlaylistExists">Playlist already exists</sys:String>
+    <sys:String x:Key="InvalidCredentials">Invalid credentials</sys:String>
+    <sys:String x:Key="EnterCredentials">Enter username and password</sys:String>
 </ResourceDictionary>
