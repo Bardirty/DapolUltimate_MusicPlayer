@@ -113,9 +113,11 @@ namespace DapolUltimate_MusicPlayer {
 
         private void PlayStartupSound() {
             try {
-                System.Media.SystemSounds.Asterisk.Play();
-            } catch {
-                // ignore if sound fails
+                var player = new System.Media.SoundPlayer(@"Assets\o95.wav"); // путь к файлу
+                player.Load();  // можно опустить, но лучше явно
+                player.Play();  // или .PlaySync() — если нужен блокирующий вызов
+            }
+            catch (Exception ex) {
             }
         }
     }
