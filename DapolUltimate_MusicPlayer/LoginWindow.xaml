@@ -2,36 +2,37 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource LoginTitle}"
-        Height="220"
-        Width="320"
+        Height="240"
+        Width="340"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource WindowBackground}">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI"
+        FontSize="14"
+        Background="#F0F0F0">
+    <Border Background="White" Padding="20" Margin="20" CornerRadius="6" BorderBrush="#DDDDDD" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="{DynamicResource UsernameLabel}"
-                   Margin="0,0,0,5"
-                   Foreground="{DynamicResource TextColor}"/>
-        <TextBox Grid.Row="1" x:Name="UsernameBox" Margin="0,0,0,10" Style="{DynamicResource TextBoxStyle}"/>
+            <TextBlock Grid.Row="0"
+                       Text="{DynamicResource UsernameLabel}"
+                       Margin="0,0,0,5"/>
+            <TextBox Grid.Row="1" x:Name="UsernameBox" Margin="0,0,0,10"/>
 
-        <TextBlock Grid.Row="2"
-                   Text="{DynamicResource PasswordLabel}"
-                   Margin="0,0,0,5"
-                   Foreground="{DynamicResource TextColor}"/>
-        <PasswordBox Grid.Row="3" x:Name="PasswordBox" Margin="0,0,0,10" Foreground="{DynamicResource TextColor}" Background="#30303030"/>
+            <TextBlock Grid.Row="2"
+                       Text="{DynamicResource PasswordLabel}"
+                       Margin="0,0,0,5"/>
+            <PasswordBox Grid.Row="3" x:Name="PasswordBox" Margin="0,0,0,10"/>
 
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource LoginButton}" Click="Login_Click"
-                    Margin="0,0,5,0" Style="{DynamicResource ButtonStyle}"/>
-            <Button Content="{DynamicResource RegisterButton}" Click="Register_Click"
-                    Style="{DynamicResource ButtonStyle}"/>
-        </StackPanel>
-    </Grid>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{DynamicResource LoginButton}" Click="Login_Click" Margin="0,0,5,0"/>
+                <Button Content="{DynamicResource RegisterButton}" Click="Register_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>
