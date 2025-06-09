@@ -17,7 +17,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Border Background="{DynamicResource WindowBackground}"
-            Padding="20" Margin="20" CornerRadius="8"
+            Padding="20" CornerRadius="8"
             BorderBrush="{StaticResource AeroGlassWhite}" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
@@ -52,8 +52,7 @@
                 <Button Content="{DynamicResource LoginButton}"
                         Style="{DynamicResource ButtonStyle}"
                         Click="Login_Click"
-                        Width="100"
-                        Margin="0,0,5,0"/>
+                        Width="100"/>
                 <Button Content="{DynamicResource RegisterButton}"
                         Style="{DynamicResource ButtonStyle}"
                         Click="Register_Click"
