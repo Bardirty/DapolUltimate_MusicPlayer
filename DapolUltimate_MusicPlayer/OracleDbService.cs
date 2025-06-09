@@ -60,7 +60,9 @@ BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE PLAYLISTS (
             ID NUMBER PRIMARY KEY,
-            NAME NVARCHAR2(200)
+            USER_ID NUMBER REFERENCES USERS(ID),
+            NAME NVARCHAR2(200),
+            IS_PUBLIC NUMBER(1)
         )';
 EXCEPTION
     WHEN OTHERS THEN
@@ -211,17 +213,20 @@ END;";
             }
         }
 
-        public List<PlaylistInfo> LoadPlaylists() {
+        public List<PlaylistInfo> LoadPlaylists(int userId) {
             var list = new List<PlaylistInfo>();
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS ORDER BY ID";
+                    cmd.CommandText = "SELECT ID, NAME, USER_ID, IS_PUBLIC FROM PLAYLISTS WHERE IS_PUBLIC = 1 OR USER_ID = :u ORDER BY ID";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
                     using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
                             list.Add(new PlaylistInfo {
                                 Id = reader.GetInt32(0),
-                                Name = reader.GetString(1)
+                                Name = reader.GetString(1),
+                                UserId = reader.GetInt32(2),
+                                IsPublic = reader.GetInt32(3) == 1
                             });
                         }
                     }
@@ -230,13 +235,15 @@ END;";
             return list;
         }
 
-        public int AddPlaylist(string name) {
+        public int AddPlaylist(int userId, string name, bool isPublic) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :name) RETURNING ID INTO :id";
+                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, USER_ID, NAME, IS_PUBLIC) VALUES (PLAYLISTS_SEQ.NEXTVAL, :u, :name, :pub) RETURNING ID INTO :id";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
                     var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = name };
                     cmd.Parameters.Add(nameParam);
+                    cmd.Parameters.Add(new OracleParameter("pub", isPublic ? 1 : 0));
                     var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
                     cmd.Parameters.Add(idParam);
                     cmd.ExecuteNonQuery();

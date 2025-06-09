@@ -78,10 +78,10 @@ namespace DapolUltimate_MusicPlayer {
                     return;
                 }
 
-                playlists = dbService.LoadPlaylists();
+                playlists = dbService.LoadPlaylists(userId);
                 if (playlists.Count == 0) {
-                    var id = dbService.AddPlaylist("Default");
-                    playlists.Add(new PlaylistInfo { Id = id, Name = "Default" });
+                    var id = dbService.AddPlaylist(userId, "Default", true);
+                    playlists.Add(new PlaylistInfo { Id = id, Name = "Default", UserId = userId, IsPublic = true });
                 }
                 OnPropertyChanged(nameof(PlaylistNames));
 

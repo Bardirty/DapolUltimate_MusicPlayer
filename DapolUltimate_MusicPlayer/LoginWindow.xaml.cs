@@ -28,6 +28,14 @@ namespace DapolUltimate_MusicPlayer {
                 MessageBox.Show("Enter username and password");
                 return;
             }
+            if (UsernameBox.Text.Trim().Length < 3) {
+                MessageBox.Show("Username too short");
+                return;
+            }
+            if (PasswordBox.Password.Length < 6) {
+                MessageBox.Show("Password too short");
+                return;
+            }
             if (dbService.GetUserByUsername(UsernameBox.Text.Trim()) != null) {
                 MessageBox.Show("Username already exists");
                 return;
