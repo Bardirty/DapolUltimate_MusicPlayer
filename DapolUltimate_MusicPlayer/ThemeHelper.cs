@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace DapolUltimate_MusicPlayer {
     internal static class ThemeHelper {
-        public static void ApplyTheme(ResourceDictionaryCollection resources, string themeName) {
+        public static void ApplyTheme(ICollection<ResourceDictionary> resources, string themeName) {
             resources.Clear();
 
             var baseDict = new ResourceDictionary {
