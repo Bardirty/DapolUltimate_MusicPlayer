@@ -73,6 +73,7 @@ namespace DapolUltimate_MusicPlayer {
                 var login = new LoginWindow();
                 if (login.ShowDialog() == true && login.UserId.HasValue) {
                     userId = login.UserId.Value;
+                    PlayStartupSound();
                 } else {
                     Close();
                     return;
@@ -108,6 +109,14 @@ namespace DapolUltimate_MusicPlayer {
 
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void PlayStartupSound() {
+            try {
+                System.Media.SystemSounds.Asterisk.Play();
+            } catch {
+                // ignore if sound fails
+            }
         }
     }
 }

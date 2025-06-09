@@ -10,6 +10,10 @@ namespace DapolUltimate_MusicPlayer {
 
         public LoginWindow() {
             InitializeComponent();
+
+            var theme = Properties.Settings.Default.SelectedTheme;
+            if (string.IsNullOrEmpty(theme)) theme = "Aero";
+            ThemeHelper.ApplyTheme(Resources.MergedDictionaries, theme);
         }
 
         private void Login_Click(object sender, RoutedEventArgs e) {
