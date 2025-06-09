@@ -13,6 +13,11 @@ namespace DapolUltimate_MusicPlayer {
             ThemeHelper.ApplyTheme(Resources.MergedDictionaries, "Aero");
         }
 
+        private void Window_MouseLeftButtonDown(object sender,
+            System.Windows.Input.MouseButtonEventArgs e) {
+            DragMove();
+        }
+
         private void Login_Click(object sender, RoutedEventArgs e) {
             var user = dbService.GetUserByUsername(UsernameBox.Text.Trim());
             var hash = ComputeHash(PasswordBox.Password);
