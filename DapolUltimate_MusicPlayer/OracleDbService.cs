@@ -291,7 +291,8 @@ END;";
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = "UPDATE PLAYLISTS SET NAME = :name WHERE ID = :id";
-                    cmd.Parameters.Add(new OracleParameter("name", newName));
+                    var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = newName };
+                    cmd.Parameters.Add(nameParam);
                     cmd.Parameters.Add(new OracleParameter("id", playlistId));
                     cmd.ExecuteNonQuery();
                 }

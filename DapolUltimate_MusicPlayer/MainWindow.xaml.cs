@@ -91,7 +91,7 @@ namespace DapolUltimate_MusicPlayer {
                 playlistIds = tracks.Select(t => t.Id).ToList();
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistSelector.SelectedIndex = 0;
-                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : 0;
+                LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : lang == "pl-PL" ? 2 : 0;
                 LoadFavorites();
                 LoadStats();
             }

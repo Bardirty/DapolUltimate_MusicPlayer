@@ -8,6 +8,8 @@ namespace DapolUltimate_MusicPlayer {
                 LocalizationManager.ApplyLanguage("en-US");
             } else if (LanguageSelector.SelectedIndex == 1) {
                 LocalizationManager.ApplyLanguage("ru-RU");
+            } else if (LanguageSelector.SelectedIndex == 2) {
+                LocalizationManager.ApplyLanguage("pl-PL");
             }
         }
     }

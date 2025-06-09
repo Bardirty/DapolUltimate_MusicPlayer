@@ -375,6 +375,7 @@
                                   Style="{DynamicResource ComboBoxStyle}">
                             <ComboBoxItem Content="{DynamicResource LanguageEnglish}"/>
                             <ComboBoxItem Content="{DynamicResource LanguageRussian}"/>
+                            <ComboBoxItem Content="{DynamicResource LanguagePolish}"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>
