@@ -32,17 +32,32 @@
                        Text="{DynamicResource UsernameLabel}"
                        Margin="0,0,0,5"
                        Foreground="{DynamicResource TextColor}"/>
-            <TextBox Grid.Row="1" x:Name="UsernameBox" Style="{DynamicResource TextBoxStyle}" Margin="0,0,0,10"/>
+            <TextBox Grid.Row="1"
+                     x:Name="UsernameBox"
+                     Style="{DynamicResource TextBoxStyle}"
+                     Margin="0,0,0,10"
+                     MinWidth="220"/>
 
             <TextBlock Grid.Row="2"
                        Text="{DynamicResource PasswordLabel}"
                        Margin="0,0,0,5"
                        Foreground="{DynamicResource TextColor}"/>
-            <PasswordBox Grid.Row="3" x:Name="PasswordBox" Margin="0,0,0,10"/>
+            <PasswordBox Grid.Row="3"
+                         x:Name="PasswordBox"
+                         Style="{DynamicResource PasswordBoxStyle}"
+                         Margin="0,0,0,10"
+                         MinWidth="220"/>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="{DynamicResource LoginButton}" Style="{DynamicResource ButtonStyle}" Click="Login_Click" Margin="0,0,5,0"/>
-                <Button Content="{DynamicResource RegisterButton}" Style="{DynamicResource ButtonStyle}" Click="Register_Click"/>
+                <Button Content="{DynamicResource LoginButton}"
+                        Style="{DynamicResource ButtonStyle}"
+                        Click="Login_Click"
+                        Width="100"
+                        Margin="0,0,5,0"/>
+                <Button Content="{DynamicResource RegisterButton}"
+                        Style="{DynamicResource ButtonStyle}"
+                        Click="Register_Click"
+                        Width="100"/>
             </StackPanel>
         </Grid>
     </Border>

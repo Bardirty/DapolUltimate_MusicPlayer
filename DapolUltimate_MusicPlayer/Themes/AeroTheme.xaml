@@ -393,6 +393,50 @@
         </Setter>
     </Style>
 
+    <!-- Style for password boxes matching text boxes -->
+    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+        <Setter Property="Background" Value="#30FFFFFF"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AeroGlassWhite}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border x:Name="MainBorder"
+                           CornerRadius="6"
+                           Background="{TemplateBinding Background}"
+                           BorderBrush="{TemplateBinding BorderBrush}"
+                           BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="1" Opacity="0.3" Color="#FF0067C0"/>
+                        </Border.Effect>
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                     Margin="{TemplateBinding Padding}"
+                                     VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background" Value="#40FFFFFF"/>
+                            <Setter TargetName="MainBorder" Property="BorderBrush" Value="#A0FFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background" Value="#50FFFFFF"/>
+                            <Setter TargetName="MainBorder" Property="BorderBrush" Value="#FFFFFF"/>
+                            <Setter TargetName="MainBorder" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.5" Color="#FF2B9CFF"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Новый стиль для выпадающего списка -->
     <Style x:Key="AeroComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Background" Value="#30FFFFFF"/>
