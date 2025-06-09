@@ -208,6 +208,7 @@
     <Compile Include="UserInfo.cs" />
     <Compile Include="TrackStatInfo.cs" />
     <Compile Include="LocalizationManager.cs" />
+    <Compile Include="ThemeHelper.cs" />
     <Page Include="Themes\AeroTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
