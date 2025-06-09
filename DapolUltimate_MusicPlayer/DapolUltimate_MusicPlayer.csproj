@@ -154,7 +154,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="SoundCloudService.cs" />
     <Compile Include="YouTubeService.cs" />
     <Compile Include="OracleDbService.cs" />
     <Compile Include="PlaylistInfo.cs" />
