@@ -110,8 +110,8 @@ BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE USERS (
             ID NUMBER PRIMARY KEY,
-            USERNAME NVARCHAR2(200) UNIQUE,
-            PASSWORD_HASH NVARCHAR2(512),
+            USERNAME NVARCHAR2(200) NOT NULL UNIQUE,
+            PASSWORD_HASH NVARCHAR2(512) NOT NULL,
             CREATED_AT TIMESTAMP
         )';
 EXCEPTION
@@ -353,6 +353,17 @@ END;";
         public int RegisterUser(string username, string passwordHash) {
             using (var conn = GetConnection()) {
                 conn.Open();
+
+                // check if username already exists
+                using (var check = conn.CreateCommand()) {
+                    check.CommandText = "SELECT 1 FROM USERS WHERE USERNAME = :u";
+                    check.Parameters.Add(new OracleParameter("u", username));
+                    var exists = check.ExecuteScalar();
+                    if (exists != null) {
+                        throw new InvalidOperationException("Username already exists");
+                    }
+                }
+
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = @"INSERT INTO USERS (ID, USERNAME, PASSWORD_HASH, CREATED_AT) VALUES (USERS_SEQ.NEXTVAL, :u, :p, :c) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("u", username));

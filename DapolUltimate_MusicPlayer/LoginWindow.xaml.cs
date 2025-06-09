@@ -28,6 +28,10 @@ namespace DapolUltimate_MusicPlayer {
                 MessageBox.Show("Enter username and password");
                 return;
             }
+            if (dbService.GetUserByUsername(UsernameBox.Text.Trim()) != null) {
+                MessageBox.Show("Username already exists");
+                return;
+            }
             var hash = ComputeHash(PasswordBox.Password);
             try {
                 UserId = dbService.RegisterUser(UsernameBox.Text.Trim(), hash);
