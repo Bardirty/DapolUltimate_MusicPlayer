@@ -54,6 +54,41 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    //   USERS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE USERS (
+            ID NUMBER PRIMARY KEY,
+            USERNAME NVARCHAR2(200) NOT NULL UNIQUE,
+            PASSWORD_HASH NVARCHAR2(512) NOT NULL,
+            CREATED_AT TIMESTAMP
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE USERS_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE USERS_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
                     //   PLAYLISTS
                     cmd.CommandText = @"
 BEGIN
@@ -98,41 +133,6 @@ BEGIN
             TRACK_ID NUMBER,
             PRIMARY KEY (PLAYLIST_ID, TRACK_ID)
         )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -955 THEN RAISE; END IF;
-END;";
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (var cmd = conn.CreateCommand()) {
-                    //   USERS
-                    cmd.CommandText = @"
-BEGIN
-    EXECUTE IMMEDIATE '
-        CREATE TABLE USERS (
-            ID NUMBER PRIMARY KEY,
-            USERNAME NVARCHAR2(200) NOT NULL UNIQUE,
-            PASSWORD_HASH NVARCHAR2(512) NOT NULL,
-            CREATED_AT TIMESTAMP
-        )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -955 THEN RAISE; END IF;
-END;";
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (var cmd = conn.CreateCommand()) {
-                    //  SEQUENCE USERS_SEQ
-                    cmd.CommandText = @"
-BEGIN
-    EXECUTE IMMEDIATE '
-        CREATE SEQUENCE USERS_SEQ
-        START WITH 1
-        INCREMENT BY 1
-        NOMAXVALUE
-        NOCACHE';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE != -955 THEN RAISE; END IF;
@@ -207,6 +207,40 @@ BEGIN
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                // ensure new playlist columns exist for older installations
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE PLAYLISTS ADD (USER_ID NUMBER)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -1430 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE PLAYLISTS ADD (IS_PUBLIC NUMBER(1) DEFAULT 1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -1430 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'UPDATE PLAYLISTS SET IS_PUBLIC = 1 WHERE IS_PUBLIC IS NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -904 THEN RAISE; END IF;
 END;";
                     cmd.ExecuteNonQuery();
                 }
