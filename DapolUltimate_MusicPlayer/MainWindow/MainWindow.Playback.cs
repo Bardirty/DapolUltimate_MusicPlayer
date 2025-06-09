@@ -278,6 +278,10 @@ namespace DapolUltimate_MusicPlayer {
                 PlayPauseButton.Content = "⏸";
 
                 StatusText.Text = $"Now playing: {TrackTitle.Text}";
+                if (userId > 0 && currentTrackIndex >= 0 && currentTrackIndex < playlistIds.Count) {
+                    dbService.RecordPlayback(userId, playlistIds[currentTrackIndex]);
+                    LoadStats();
+                }
             }
             catch (Exception ex) {
                 MessageBox.Show($"Error loading file: {ex.Message}", "Error",

@@ -102,6 +102,112 @@ EXCEPTION
 END;";
                     cmd.ExecuteNonQuery();
                 }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   USERS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE USERS (
+            ID NUMBER PRIMARY KEY,
+            USERNAME NVARCHAR2(200) UNIQUE,
+            PASSWORD_HASH NVARCHAR2(512),
+            CREATED_AT TIMESTAMP
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE USERS_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE USERS_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   FAVORITES
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE FAVORITES (
+            ID NUMBER PRIMARY KEY,
+            USER_ID NUMBER REFERENCES USERS(ID),
+            TRACK_ID NUMBER REFERENCES TRACKS(ID),
+            CREATED_AT TIMESTAMP,
+            UNIQUE (USER_ID, TRACK_ID)
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE FAVORITES_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE FAVORITES_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //   PLAYBACK_STATS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE PLAYBACK_STATS (
+            ID NUMBER PRIMARY KEY,
+            USER_ID NUMBER REFERENCES USERS(ID),
+            TRACK_ID NUMBER REFERENCES TRACKS(ID),
+            PLAYED_AT TIMESTAMP
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE PLAYBACK_STATS_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE PLAYBACK_STATS_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -242,6 +348,135 @@ END;";
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public int RegisterUser(string username, string passwordHash) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"INSERT INTO USERS (ID, USERNAME, PASSWORD_HASH, CREATED_AT) VALUES (USERS_SEQ.NEXTVAL, :u, :p, :c) RETURNING ID INTO :id";
+                    cmd.Parameters.Add(new OracleParameter("u", username));
+                    cmd.Parameters.Add(new OracleParameter("p", passwordHash));
+                    cmd.Parameters.Add(new OracleParameter("c", DateTime.Now));
+                    var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
+                    cmd.Parameters.Add(idParam);
+                    cmd.ExecuteNonQuery();
+                    return Convert.ToInt32(idParam.Value.ToString());
+                }
+            }
+        }
+
+        public UserInfo GetUserByUsername(string username) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "SELECT ID, USERNAME, PASSWORD_HASH, CREATED_AT FROM USERS WHERE USERNAME = :u";
+                    cmd.Parameters.Add(new OracleParameter("u", username));
+                    using (var reader = cmd.ExecuteReader()) {
+                        if (reader.Read()) {
+                            return new UserInfo {
+                                Id = reader.GetInt32(0),
+                                Username = reader.GetString(1),
+                                PasswordHash = reader.GetString(2),
+                                CreatedAt = reader.GetDateTime(3)
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void AddFavorite(int userId, int trackId) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"INSERT INTO FAVORITES (ID, USER_ID, TRACK_ID, CREATED_AT) VALUES (FAVORITES_SEQ.NEXTVAL, :u, :t, :c)";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
+                    cmd.Parameters.Add(new OracleParameter("t", trackId));
+                    cmd.Parameters.Add(new OracleParameter("c", DateTime.Now));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RemoveFavorite(int userId, int trackId) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = "DELETE FROM FAVORITES WHERE USER_ID = :u AND TRACK_ID = :t";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
+                    cmd.Parameters.Add(new OracleParameter("t", trackId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<TrackInfo> GetUserFavorites(int userId) {
+            var list = new List<TrackInfo>();
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT FROM TRACKS t JOIN FAVORITES f ON t.ID = f.TRACK_ID WHERE f.USER_ID = :u ORDER BY f.CREATED_AT DESC";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
+                    using (var reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            list.Add(new TrackInfo {
+                                Id = reader.GetInt32(0),
+                                Title = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                Path = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                IsYouTube = reader.GetInt32(3) == 1,
+                                CreatedAt = reader.IsDBNull(4) ? DateTime.MinValue : reader.GetDateTime(4)
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public void RecordPlayback(int userId, int trackId) {
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"INSERT INTO PLAYBACK_STATS (ID, USER_ID, TRACK_ID, PLAYED_AT) VALUES (PLAYBACK_STATS_SEQ.NEXTVAL, :u, :t, :c)";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
+                    cmd.Parameters.Add(new OracleParameter("t", trackId));
+                    cmd.Parameters.Add(new OracleParameter("c", DateTime.Now));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<TrackStatInfo> GetTopPlayedTracks(int topN) {
+            var list = new List<TrackStatInfo>();
+            using (var conn = GetConnection()) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"SELECT * FROM (
+                        SELECT t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT, COUNT(*) AS C
+                        FROM TRACKS t JOIN PLAYBACK_STATS p ON t.ID = p.TRACK_ID
+                        GROUP BY t.ID, t.TITLE, t.PATH, t.IS_YOUTUBE, t.CREATED_AT
+                        ORDER BY C DESC)
+                        WHERE ROWNUM <= :n";
+                    cmd.Parameters.Add(new OracleParameter("n", topN));
+                    using (var reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            list.Add(new TrackStatInfo {
+                                Track = new TrackInfo {
+                                    Id = reader.GetInt32(0),
+                                    Title = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    Path = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    IsYouTube = reader.GetInt32(3) == 1,
+                                    CreatedAt = reader.IsDBNull(4) ? DateTime.MinValue : reader.GetDateTime(4)
+                                },
+                                PlayCount = reader.GetInt32(5)
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
         }
     }
 }

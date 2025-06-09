@@ -70,6 +70,14 @@ namespace DapolUltimate_MusicPlayer {
             try {
                 dbService.EnsureTableExists();
 
+                var login = new LoginWindow();
+                if (login.ShowDialog() == true && login.UserId.HasValue) {
+                    userId = login.UserId.Value;
+                } else {
+                    Close();
+                    return;
+                }
+
                 playlists = dbService.LoadPlaylists();
                 if (playlists.Count == 0) {
                     var id = dbService.AddPlaylist("Default");
@@ -84,6 +92,8 @@ namespace DapolUltimate_MusicPlayer {
                 OnPropertyChanged(nameof(PlaylistDisplayNames));
                 PlaylistSelector.SelectedIndex = 0;
                 LanguageSelector.SelectedIndex = lang == "ru-RU" ? 1 : 0;
+                LoadFavorites();
+                LoadStats();
             }
             catch (Exception ex) {
                 LogError(ex);

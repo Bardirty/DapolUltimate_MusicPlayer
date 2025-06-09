@@ -10,6 +10,13 @@
     <sys:String x:Key="UnknownArtist">Неизвестный исполнитель</sys:String>
     <sys:String x:Key="PlaylistHeader">Плейлист</sys:String>
     <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="FavoritesHeader">Избранное</sys:String>
+    <sys:String x:Key="StatsHeader">Топ прослушиваний</sys:String>
+    <sys:String x:Key="LoginTitle">Вход</sys:String>
+    <sys:String x:Key="UsernameLabel">Логин</sys:String>
+    <sys:String x:Key="PasswordLabel">Пароль</sys:String>
+    <sys:String x:Key="LoginButton">Войти</sys:String>
+    <sys:String x:Key="RegisterButton">Регистрация</sys:String>
     <sys:String x:Key="SearchButton">Поиск</sys:String>
     <sys:String x:Key="AeroTheme">Тема Aero</sys:String>
     <sys:String x:Key="FlatTheme">Плоская тема</sys:String>

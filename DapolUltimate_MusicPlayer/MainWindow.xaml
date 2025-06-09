@@ -322,6 +322,41 @@
                                     </ListBox>
                                 </StackPanel>
                             </TabItem>
+                            <TabItem Header="{DynamicResource FavoritesHeader}" Style="{DynamicResource TabItemStyle}">
+                                <Border CornerRadius="10" Background="{DynamicResource DarkGlass}" BorderBrush="#80FFFFFF" BorderThickness="1">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Color="#FF0078D7"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <ListBox x:Name="FavoritesBox" ItemsSource="{Binding FavoriteTracks}" ItemContainerStyle="{DynamicResource ListBoxItemStyle}" Background="Transparent" BorderThickness="0" MouseDoubleClick="FavoritesBox_MouseDoubleClick"/>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,5">
+                                            <Button Content="+" Width="25" Height="25" Margin="0,0,5,0" Style="{DynamicResource RoundButtonStyle}" Click="AddFavorite_Click"/>
+                                            <Button Content="-" Width="25" Height="25" Style="{DynamicResource RoundButtonStyle}" Click="RemoveFavorite_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </TabItem>
+                            <TabItem Header="{DynamicResource StatsHeader}" Style="{DynamicResource TabItemStyle}">
+                                <Border CornerRadius="10" Background="{DynamicResource DarkGlass}" BorderBrush="#80FFFFFF" BorderThickness="1">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Color="#FF0078D7"/>
+                                    </Border.Effect>
+                                    <ListBox x:Name="StatsBox" ItemsSource="{Binding TopTracks}" ItemContainerStyle="{DynamicResource ListBoxItemStyle}" Background="Transparent" BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Track.Title}" Width="160" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding PlayCount}" Margin="10,0,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Border>
+                            </TabItem>
                         </TabControl>
                     </Grid>
 
