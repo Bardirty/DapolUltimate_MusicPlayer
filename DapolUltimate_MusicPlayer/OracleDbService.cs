@@ -54,13 +54,50 @@ END;";
                 }
 
                 using (var cmd = conn.CreateCommand()) {
+                    //   USERS
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE TABLE USERS (
+            ID NUMBER PRIMARY KEY,
+            USERNAME NVARCHAR2(200) NOT NULL UNIQUE,
+            PASSWORD_HASH NVARCHAR2(512) NOT NULL,
+            CREATED_AT TIMESTAMP
+        )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    //  SEQUENCE USERS_SEQ
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE '
+        CREATE SEQUENCE USERS_SEQ
+        START WITH 1
+        INCREMENT BY 1
+        NOMAXVALUE
+        NOCACHE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -955 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
                     //   PLAYLISTS
                     cmd.CommandText = @"
 BEGIN
     EXECUTE IMMEDIATE '
         CREATE TABLE PLAYLISTS (
             ID NUMBER PRIMARY KEY,
-            NAME NVARCHAR2(200)
+            USER_ID NUMBER REFERENCES USERS(ID),
+            NAME NVARCHAR2(200),
+            IS_PUBLIC NUMBER(1)
         )';
 EXCEPTION
     WHEN OTHERS THEN
@@ -96,41 +133,6 @@ BEGIN
             TRACK_ID NUMBER,
             PRIMARY KEY (PLAYLIST_ID, TRACK_ID)
         )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -955 THEN RAISE; END IF;
-END;";
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (var cmd = conn.CreateCommand()) {
-                    //   USERS
-                    cmd.CommandText = @"
-BEGIN
-    EXECUTE IMMEDIATE '
-        CREATE TABLE USERS (
-            ID NUMBER PRIMARY KEY,
-            USERNAME NVARCHAR2(200) UNIQUE,
-            PASSWORD_HASH NVARCHAR2(512),
-            CREATED_AT TIMESTAMP
-        )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -955 THEN RAISE; END IF;
-END;";
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (var cmd = conn.CreateCommand()) {
-                    //  SEQUENCE USERS_SEQ
-                    cmd.CommandText = @"
-BEGIN
-    EXECUTE IMMEDIATE '
-        CREATE SEQUENCE USERS_SEQ
-        START WITH 1
-        INCREMENT BY 1
-        NOMAXVALUE
-        NOCACHE';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE != -955 THEN RAISE; END IF;
@@ -208,20 +210,57 @@ EXCEPTION
 END;";
                     cmd.ExecuteNonQuery();
                 }
+
+                // ensure new playlist columns exist for older installations
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE PLAYLISTS ADD (USER_ID NUMBER)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -1430 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE PLAYLISTS ADD (IS_PUBLIC NUMBER(1) DEFAULT 1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -1430 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+BEGIN
+    EXECUTE IMMEDIATE 'UPDATE PLAYLISTS SET IS_PUBLIC = 1 WHERE IS_PUBLIC IS NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -904 THEN RAISE; END IF;
+END;";
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
-        public List<PlaylistInfo> LoadPlaylists() {
+        public List<PlaylistInfo> LoadPlaylists(int userId) {
             var list = new List<PlaylistInfo>();
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = "SELECT ID, NAME FROM PLAYLISTS ORDER BY ID";
+                    cmd.CommandText = "SELECT ID, NAME, USER_ID, IS_PUBLIC FROM PLAYLISTS WHERE IS_PUBLIC = 1 OR USER_ID = :u ORDER BY ID";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
                     using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
                             list.Add(new PlaylistInfo {
                                 Id = reader.GetInt32(0),
-                                Name = reader.GetString(1)
+                                Name = reader.GetString(1),
+                                UserId = reader.GetInt32(2),
+                                IsPublic = reader.GetInt32(3) == 1
                             });
                         }
                     }
@@ -230,13 +269,15 @@ END;";
             return list;
         }
 
-        public int AddPlaylist(string name) {
+        public int AddPlaylist(int userId, string name, bool isPublic) {
             using (var conn = GetConnection()) {
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
-                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, NAME) VALUES (PLAYLISTS_SEQ.NEXTVAL, :name) RETURNING ID INTO :id";
+                    cmd.CommandText = @"INSERT INTO PLAYLISTS (ID, USER_ID, NAME, IS_PUBLIC) VALUES (PLAYLISTS_SEQ.NEXTVAL, :u, :name, :pub) RETURNING ID INTO :id";
+                    cmd.Parameters.Add(new OracleParameter("u", userId));
                     var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = name };
                     cmd.Parameters.Add(nameParam);
+                    cmd.Parameters.Add(new OracleParameter("pub", isPublic ? 1 : 0));
                     var idParam = new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
                     cmd.Parameters.Add(idParam);
                     cmd.ExecuteNonQuery();
@@ -250,7 +291,8 @@ END;";
                 conn.Open();
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = "UPDATE PLAYLISTS SET NAME = :name WHERE ID = :id";
-                    cmd.Parameters.Add(new OracleParameter("name", newName));
+                    var nameParam = new OracleParameter("name", OracleDbType.NVarchar2) { Value = newName };
+                    cmd.Parameters.Add(nameParam);
                     cmd.Parameters.Add(new OracleParameter("id", playlistId));
                     cmd.ExecuteNonQuery();
                 }
@@ -353,6 +395,17 @@ END;";
         public int RegisterUser(string username, string passwordHash) {
             using (var conn = GetConnection()) {
                 conn.Open();
+
+                // check if username already exists
+                using (var check = conn.CreateCommand()) {
+                    check.CommandText = "SELECT 1 FROM USERS WHERE USERNAME = :u";
+                    check.Parameters.Add(new OracleParameter("u", username));
+                    var exists = check.ExecuteScalar();
+                    if (exists != null) {
+                        throw new InvalidOperationException("Username already exists");
+                    }
+                }
+
                 using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = @"INSERT INTO USERS (ID, USERNAME, PASSWORD_HASH, CREATED_AT) VALUES (USERS_SEQ.NEXTVAL, :u, :p, :c) RETURNING ID INTO :id";
                     cmd.Parameters.Add(new OracleParameter("u", username));

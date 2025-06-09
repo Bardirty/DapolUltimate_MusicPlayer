@@ -29,8 +29,11 @@ namespace DapolUltimate_MusicPlayer {
         private void AddPlaylist_Click(object sender, RoutedEventArgs e) {
             var name = Interaction.InputBox("Playlist name", "New Playlist", "");
             if (string.IsNullOrWhiteSpace(name)) return;
-            var id = dbService.AddPlaylist(name);
-            playlists.Add(new PlaylistInfo { Id = id, Name = name });
+            var result = MessageBox.Show("Make playlist public?", "Visibility", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Cancel) return;
+            bool isPublic = result == MessageBoxResult.Yes;
+            var id = dbService.AddPlaylist(userId, name, isPublic);
+            playlists.Add(new PlaylistInfo { Id = id, Name = name, UserId = userId, IsPublic = isPublic });
             OnPropertyChanged(nameof(PlaylistNames));
             PlaylistSelector.SelectedIndex = playlists.Count - 1;
         }

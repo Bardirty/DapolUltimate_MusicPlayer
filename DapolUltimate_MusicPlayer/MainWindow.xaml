@@ -332,7 +332,13 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <ListBox x:Name="FavoritesBox" ItemsSource="{Binding FavoriteTracks}" ItemContainerStyle="{DynamicResource ListBoxItemStyle}" Background="Transparent" BorderThickness="0" MouseDoubleClick="FavoritesBox_MouseDoubleClick"/>
+                                        <ListBox x:Name="FavoritesBox" ItemsSource="{Binding FavoriteTracks}" ItemContainerStyle="{DynamicResource ListBoxItemStyle}" Background="Transparent" BorderThickness="0" MouseDoubleClick="FavoritesBox_MouseDoubleClick">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Title}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,5">
                                             <Button Content="+" Width="25" Height="25" Margin="0,0,5,0" Style="{DynamicResource RoundButtonStyle}" Click="AddFavorite_Click"/>
                                             <Button Content="-" Width="25" Height="25" Style="{DynamicResource RoundButtonStyle}" Click="RemoveFavorite_Click"/>
@@ -369,6 +375,7 @@
                                   Style="{DynamicResource ComboBoxStyle}">
                             <ComboBoxItem Content="{DynamicResource LanguageEnglish}"/>
                             <ComboBoxItem Content="{DynamicResource LanguageRussian}"/>
+                            <ComboBoxItem Content="{DynamicResource LanguagePolish}"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>

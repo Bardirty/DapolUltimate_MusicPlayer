@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="WindowTitle">Odtwarzacz Dapol</sys:String>
+    <sys:String x:Key="MainTitle">DAPOL ULTIMATE PLAYER</sys:String>
+    <sys:String x:Key="Subtitle">NAJWYŹSZE DOŚWIADCZENIE MUZYCZNE</sys:String>
+    <sys:String x:Key="StatusReady">Gotowe</sys:String>
+    <sys:String x:Key="TracksLabel">Utwory: {0}</sys:String>
+    <sys:String x:Key="NoTrack">Brak utworu</sys:String>
+    <sys:String x:Key="UnknownArtist">Nieznany wykonawca</sys:String>
+    <sys:String x:Key="PlaylistHeader">Lista odtwarzania</sys:String>
+    <sys:String x:Key="YouTubeHeader">YouTube</sys:String>
+    <sys:String x:Key="FavoritesHeader">Ulubione</sys:String>
+    <sys:String x:Key="StatsHeader">Najczęściej odtwarzane</sys:String>
+    <sys:String x:Key="LoginTitle">Logowanie</sys:String>
+    <sys:String x:Key="UsernameLabel">Nazwa użytkownika</sys:String>
+    <sys:String x:Key="PasswordLabel">Hasło</sys:String>
+    <sys:String x:Key="LoginButton">Zaloguj</sys:String>
+    <sys:String x:Key="RegisterButton">Rejestracja</sys:String>
+    <sys:String x:Key="SearchButton">Szukaj</sys:String>
+    <sys:String x:Key="AeroTheme">Motyw Aero</sys:String>
+    <sys:String x:Key="FlatTheme">Motyw Płaski</sys:String>
+    <sys:String x:Key="DarkTheme">Ciemny motyw</sys:String>
+    <sys:String x:Key="LanguageEnglish">English</sys:String>
+    <sys:String x:Key="LanguageRussian">Русский</sys:String>
+    <sys:String x:Key="LanguagePolish">Polski</sys:String>
+</ResourceDictionary>
