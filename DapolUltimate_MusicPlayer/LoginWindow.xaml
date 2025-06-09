@@ -6,20 +6,32 @@
         Width="320"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackground}">
-    <StackPanel Margin="20">
-        <TextBlock Text="{DynamicResource UsernameLabel}"
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="{DynamicResource UsernameLabel}"
                    Margin="0,0,0,5"
                    Foreground="{DynamicResource TextColor}"/>
-        <TextBox x:Name="UsernameBox" Margin="0,0,0,10" Style="{DynamicResource TextBoxStyle}"/>
-        <TextBlock Text="{DynamicResource PasswordLabel}"
+        <TextBox Grid.Row="1" x:Name="UsernameBox" Margin="0,0,0,10" Style="{DynamicResource TextBoxStyle}"/>
+
+        <TextBlock Grid.Row="2"
+                   Text="{DynamicResource PasswordLabel}"
                    Margin="0,0,0,5"
                    Foreground="{DynamicResource TextColor}"/>
-        <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" Foreground="{DynamicResource TextColor}" Background="#30303030"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <PasswordBox Grid.Row="3" x:Name="PasswordBox" Margin="0,0,0,10" Foreground="{DynamicResource TextColor}" Background="#30303030"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="{DynamicResource LoginButton}" Click="Login_Click"
                     Margin="0,0,5,0" Style="{DynamicResource ButtonStyle}"/>
             <Button Content="{DynamicResource RegisterButton}" Click="Register_Click"
                     Style="{DynamicResource ButtonStyle}"/>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </Window>

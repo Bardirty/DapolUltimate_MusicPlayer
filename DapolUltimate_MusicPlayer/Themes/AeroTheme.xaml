@@ -16,6 +16,9 @@
     <SolidColorBrush x:Key="TrackArtistForeground" Color="#E0FFFFFF"/>
     <SolidColorBrush x:Key="TimeSeparatorForeground" Color="#80FFFFFF"/>
 
+    <!-- Common text color used in dialog windows -->
+    <SolidColorBrush x:Key="TextColor" Color="White"/>
+
     <SolidColorBrush x:Key="AeroAccent" Color="#FF00A4EF"/>
     <SolidColorBrush x:Key="AccentColor" Color="#FF0078D7"/>
 
