@@ -73,6 +73,7 @@ namespace DapolUltimate_MusicPlayer {
                 var login = new LoginWindow();
                 if (login.ShowDialog() == true && login.UserId.HasValue) {
                     userId = login.UserId.Value;
+                    PlayStartupSound();
                 } else {
                     Close();
                     return;
@@ -108,6 +109,21 @@ namespace DapolUltimate_MusicPlayer {
 
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void PlayStartupSound() {
+            try {
+
+        private void Window_MouseLeftButtonDown(object sender,
+            MouseButtonEventArgs e) {
+            DragMove();
+        }
+                var player = new System.Media.SoundPlayer(@"Assets\o95.wav"); // путь к файлу
+                player.Load();  // можно опустить, но лучше явно
+                player.Play();  // или .PlaySync() — если нужен блокирующий вызов
+            }
+            catch (Exception ex) {
+            }
         }
     }
 }

@@ -6,7 +6,8 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         WindowStyle="None"
-        Background="Transparent">
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Window.Resources>
         <ResourceDictionary>

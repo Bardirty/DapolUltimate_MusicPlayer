@@ -10,6 +10,12 @@ namespace DapolUltimate_MusicPlayer {
 
         public LoginWindow() {
             InitializeComponent();
+            ThemeHelper.ApplyTheme(Resources.MergedDictionaries, "Aero");
+        }
+
+        private void Window_MouseLeftButtonDown(object sender,
+            System.Windows.Input.MouseButtonEventArgs e) {
+            DragMove();
         }
 
         private void Login_Click(object sender, RoutedEventArgs e) {
